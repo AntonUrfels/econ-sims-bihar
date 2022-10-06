@@ -130,3 +130,10 @@ values(r1)[t]<- m$Diff_Mean_CompBase - m$Riskiness_Comp
 library(rasterVis)
 levelplot(r1,par.settings=RdBuTheme(),margin=F, at=seq(-2,2,0.1 ))
 
+
+# Check for -99 values
+files <- c(file1)
+r <- load_sims(files,"rice_yield",aoi,NA)
+getValues()
+
+
