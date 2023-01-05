@@ -100,10 +100,12 @@ files <- c(file1)
 r <- load_sims(files,"rice_yield",aoi,NA)
 r1 <- r[[1]][[1]]
 
-m <- read.csv("data/maxwell_outputs/RA_Wheat_baseline_fixedlong_c.csv")
+m <- read.csv("data/maxwell_output_fixedLong/RA_Rice_fixedlong_onset_medium_suppl_c.csv")
 
+v <- as.vector(getValues(r1))
 t <- which(!is.na(v))
 
+#
 w1 <-   scale(m$Riskiness_Comp,center = T)
 w2 <-   scale(m$Diff_Mean_CompBase,center = T)
 
@@ -111,24 +113,24 @@ m$Diff_Mean_CompBase[m$Diff_Mean_CompBase < 100 & m$Diff_Mean_CompBase > -100] <
 m$Diff_Mean_CompBase[m$Diff_Mean_CompBase > 0] <- 1
 m$Diff_Mean_CompBase[m$Diff_Mean_CompBase < 0] <- -1
 
-  #scale(m$MinProp_CompSOSDBase_Divdbaseyield) + scale(m$Diff_Mean_CompBase)
+#scale(m$MinProp_CompSOSDBase_Divdbaseyield) + scale(m$Diff_Mean_CompBase)
 
 
 values(r1)[t]<-w1+w2
 library(rasterVis)
-levelplot(r1,par.settings=RdBuTheme(),margin=F, at=seq(-2,2,0.1) )
+levelplot(r1,par.settings=RdBuTheme(),margin=F )
 
 values(r1)[t]<-w1
 library(rasterVis)
-levelplot(r1,par.settings=RdBuTheme(),margin=F, at=seq(-2,2,0.1) )
+levelplot(r1,par.settings=RdBuTheme(),margin=F )
 
 values(r1)[t]<- m$Diff_Mean_CompBase
 library(rasterVis)
-levelplot(r1,par.settings=RdBuTheme(),margin=F, at=c(-2,-1,0,1) )
+levelplot(r1,par.settings=RdBuTheme(),margin=F )
 
 values(r1)[t]<- m$Diff_Mean_CompBase - m$Riskiness_Comp
 library(rasterVis)
-levelplot(r1,par.settings=RdBuTheme(),margin=F, at=seq(-2,2,0.1 ))
+levelplot(r1,par.settings=RdBuTheme(),margin=F)
 
 
 # Check for -99 values
