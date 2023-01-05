@@ -100,7 +100,7 @@ files <- c(file1)
 r <- load_sims(files,"rice_yield",aoi,NA)
 r1 <- r[[1]][[1]]
 
-m <- read.csv("data/maxwell_output_fixedLong/RA_Rice_fixedlong_onset_medium_suppl_c.csv")
+m <- read.csv("data/maxwell_output_fixedLong/RA_Wheat_fixedlong_onset_medium_suppl_c.csv")
 
 v <- as.vector(getValues(r1))
 t <- which(!is.na(v))
@@ -128,9 +128,23 @@ values(r1)[t]<- m$Diff_Mean_CompBase
 library(rasterVis)
 levelplot(r1,par.settings=RdBuTheme(),margin=F )
 
-values(r1)[t]<- m$Diff_Mean_CompBase - m$Riskiness_Comp
+values(r1)[t]<- m$Riskiness_Comp
 library(rasterVis)
 levelplot(r1,par.settings=RdBuTheme(),margin=F)
+
+r1_a <- r1
+r1_b <- r1
+
+values(r1_a)[t]<- m$Riskiness_Comp
+values(r1_b)[t]<- m$Riskiness_Comp
+
+r1_c <- r1_a + r1_b
+
+library(rasterVis)
+levelplot(r1_c,par.settings=RdBuTheme(),margin=F)
+
+
+
 
 
 # Check for -99 values
