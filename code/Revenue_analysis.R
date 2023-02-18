@@ -180,7 +180,8 @@ UpperWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP
 
 UpperWTP_riceonsetlong
 
-png("output/figures/.png")
+png("output/figures/UpperWTP_riceonsetlong.png")
+UpperWTP_riceonsetlong
 
 dev.off()
 # Lower bound ---------
@@ -189,10 +190,10 @@ r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low<- r1
 values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low)[t]<- m$CompMinPropSOSDBase*-1
 library(rasterVis)
 LowerWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low,par.settings=RdBuTheme(),
-          margin=F, contour = TRUE, main="Lower WTP (Rs.ha) bound for rice onset long")
+          margin=F, contour = TRUE, main="Lower WTP (Rs./ha) bound for rice onset long")
 
-png("output/figures/u.png")
-
+png("output/figures/LowerWTP_riceonsetlong.png")
+LowerWTP_riceonsetlong
 dev.off()
 
 
