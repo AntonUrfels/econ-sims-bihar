@@ -3,7 +3,7 @@ pkg load io
 
 
 % 1 Rice fixedlong versus fixed long ---------------------------------------------
-ndataseq01060216=xlsread('rice_fixedlong_fixedlong_s.xlsx')
+ndataseq01060216=xlsread('rice_fixedlong_fixedlong_IGP.xlsx')
 CreateWTPBoundsbyCell
 CreateTableData
 
