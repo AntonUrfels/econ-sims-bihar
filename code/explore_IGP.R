@@ -91,6 +91,27 @@ create_csv("rice","rice_yield")
 create_csv("wheat","wheat_yield")
 
 
+##############################################################################
+# Generate irrigation cost surface
+scen <- c("baseline","fixed_long","onset_long","fixed_medium","onset_medium","onset_long_suppl","onset_medium_suppl")
+irrig_costs <- c("rented","diesel","electric")
+irrig_USD <- c(1.2,0.5,0.05)
+
+generate_irrig_surface <- function() {
+  files <- c(file1,file2,file3,file4,file5,file6,file7)
+  raster_df <- load_sims(files,"rice_irrig",aoi,`+`,"wheat_irrig")
+  
+  for (i in 1:length(files)) {
+    for (j in 1:length(irrig_USD)) {
+      print(paste0("Run: ",i," and ",j))
+      r <- raster_df[[i]]*irrig_USD[j]
+      raster::writeRaster(r,filename = paste0("output/",scen[i],"_",irrig_costs[j],"_irrig_costs.nc"),overwrite=T)
+    }
+  }
+}
+
+
+generate_irrig_surface()
 
 #####################################
 
