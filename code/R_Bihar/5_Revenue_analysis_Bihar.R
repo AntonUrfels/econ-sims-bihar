@@ -101,6 +101,8 @@ files <- c(file1)
 r <- load_sims(files,"rice_yield",aoi,NA)
 r1 <- r[[1]][[1]]
 
+# Revenue ------------------------------------------
+
 ### Fixed long versus farmer practice -------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_farmer_practice_fixedlong_rev.csv")
 
@@ -124,7 +126,7 @@ rice_wheat_farmer_practice_rev
 ggsave("output/figures/rice_wheat_farmer_practice_rev.png",dpi=300,width=6.88, height=4.16)
 
 
-# Fixed long versus fixed medium -----------------------------
+### Fixed long versus fixed medium -----------------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_fixedmedium_rev.csv")
 
 v <- as.vector(getValues(r1))
@@ -147,7 +149,7 @@ rice_wheat_fixed_medium_rev
 ggsave("output/figures/rice_wheat_fixed_medium_rev.png",dpi=300,width=6.88, height=4.16)
 
 
-# Fixed long versus onset  -------------------------------------
+### Fixed long versus onset  -------------------------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_onset_long_rev.csv")
 
 v <- as.vector(getValues(r1))
@@ -191,11 +193,12 @@ values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low)[t]<- m$CompMinPropSO
 library(rasterVis)
 LowerWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low,par.settings=RdBuTheme(),
           margin=F, contour = TRUE, main="Lower WTP (Rs./ha) bound for rice onset long")
-
+LowerWTP_riceonsetlong
 png("output/figures/LowerWTP_riceonsetlong.png")
 LowerWTP_riceonsetlong
 dev.off()
 
+##
 
 
 
@@ -221,8 +224,7 @@ dev.off()
 
 
 
-
-# Fixed long versus onset_long_suppl ----------------------------
+### Fixed long versus onset_long_suppl ----------------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_onset_long_suppl_rev.csv")
 
 v <- as.vector(getValues(r1))
@@ -245,7 +247,7 @@ rice_wheat_onset_long_suppl_rev
 ggsave("output/figures/rice_wheat_onset_long_suppl_rev.png",dpi=300,width=6.88, height=4.16)
 
 
-# # Fixed long versus onset medium ------------------
+### Fixed long versus onset medium ------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_onset_medium_rev.csv")
 
 v <- as.vector(getValues(r1))
@@ -268,7 +270,7 @@ rice_wheat_onset_medium_rev
 ggsave("output/figures/rice_wheat_onset_medium_rev.png",dpi=300,width=6.88, height=4.16)
 
 
-# Fixed long versus onset medium suppl ------------------
+## Fixed long versus onset medium suppl ------------------
 m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_onset_medium_suppl_rev.csv")
 
 v <- as.vector(getValues(r1))
@@ -306,3 +308,261 @@ mapview(r1_RA_rice_wheat_rev_onset_medium_supp_fixedlong_c)
 library(modelsummary)
 
 datasummary_skim(m)
+
+
+
+# Indirect profit ----------------------------------
+### Fixed long versus onset  -------------------------------------
+m <- read.csv("data/maxwell_output_fixedLong_revenue/RA_rice_wheat_fixedlong_onset_long_rev.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_rev_onset_long_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat Revenue:Onset long more beneficial than fixed long strategy")
+
+
+rice_wheat_onset_long_rev=gplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Onset long",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw())
+rice_wheat_onset_long_rev
+
+ggsave("output/figures/rice_wheat_onset_long_rev.png",dpi=300,width=6.88, height=4.16)
+
+
+# Upper bound ------------
+r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_Up<- r1
+
+values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_Up)[t]<- m$BaseMinPropSOSDComp*-1
+library(rasterVis)
+UpperWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_Up,par.settings=RdBuTheme(),
+                                 margin=F, contour = TRUE, main="Upper WTP (Rs./ha) bound for rice onset long")
+
+UpperWTP_riceonsetlong
+
+png("output/figures/UpperWTP_riceonsetlong.png")
+UpperWTP_riceonsetlong
+
+dev.off()
+# Lower bound ---------
+r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low<- r1
+
+values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low)[t]<- m$CompMinPropSOSDBase*-1
+library(rasterVis)
+LowerWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low,par.settings=RdBuTheme(),
+                                 margin=F, contour = TRUE, main="Lower WTP (Rs./ha) bound for rice onset long")
+LowerWTP_riceonsetlong
+png("output/figures/LowerWTP_riceonsetlong.png")
+LowerWTP_riceonsetlong
+dev.off()
+
+##
+## onset long ------------------------------------------
+r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low<- r1
+
+values(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low)[t]<- m$CompMinPropSOSDBase*-1
+library(rasterVis)
+LowerWTP_riceonsetlong=levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low,par.settings=RdBuTheme(),
+                                 margin=F, contour = TRUE, main="Lower WTP (Rs./ha) bound for rice onset long")
+LowerWTP_riceonsetlong
+
+flong=read.csv("data/maxwell_interpolated_prices/rice_wheat_fixed_long_rented_irrig_costs_bihar_stack_Rupees_ha_pt.csv")
+onsetlong=read.csv("data/maxwell_interpolated_prices/onset_long_rented_irrig_costs_bihar_stack_Rupees_ha_pt.csv")
+
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+fixed_long_rented_irrig_costs_bihar_stack_Rupees_ha<- r1
+onset_long_rented_irrig_costs_bihar_stack_Rupees_ha<- r1
+
+values(fixed_long_rented_irrig_costs_bihar_stack_Rupees_ha)[t]<- flong$variable_z.33
+values(onset_long_rented_irrig_costs_bihar_stack_Rupees_ha)[t]<- onsetlong$variable_z.33
+
+
+
+low_wtp=r1_RA_rice_wheat_rev_onset_long_fixedlong_c_WTP_low+fixed_long_rented_irrig_costs_bihar_stack_Rupees_ha-onset_long_rented_irrig_costs_bihar_stack_Rupees_ha
+
+library(rasterVis)
+levelplot(low_wtp,par.settings=RdBuTheme(),margin=F,main="Onset long: Lower WTP bound partial profit \n (rented irrigation)")
+
+
+
+
+
+
+
+
+
+
+# Direct approach -----------------------------------------------
+# Partial profit --------------------------------------------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_farmer_practice_fixedlong_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_farmer_practice_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_farmer_practice_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_farmer_practice_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat pprofenue:Farmer practice more beneficial than fixed long strategy")
+
+
+rice_wheat_farmer_practice_pprof=gplot(r1_RA_rice_wheat_pprof_farmer_practice_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Farmer practice",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_farmer_practice_pprof
+
+ggsave("output/figures/rice_wheat_farmer_practice_pprof.png",dpi=300,width=6.88, height=4.16)
+
+#
+### Fixed long versus fixed medium -----------------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_fixedlong_fixedmedium_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_fixed_medium_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_fixed_medium_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_fixed_medium_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat pprofenue:Fixed medium more beneficial than fixed long strategy")
+
+
+rice_wheat_fixed_medium_pprof=gplot(r1_RA_rice_wheat_pprof_fixed_medium_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Fixed medium",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_fixed_medium_pprof
+
+ggsave("output/figures/rice_wheat_fixed_medium_pprof.png",dpi=300,width=6.88, height=4.16)
+
+### Fixed long versus onset  -------------------------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_fixedlong_onset_long_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_onset_long_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat pprofenue:Onset long more beneficial than fixed long strategy")
+
+
+rice_wheat_onset_long_pprof=gplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Onset long",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_onset_long_pprof
+
+ggsave("output/figures/rice_wheat_onset_long_pprof.png",dpi=300,width=6.88, height=4.16)
+
+
+r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_Up<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_Up)[t]<- m$BaseMinPropSOSDComp*-1
+library(rasterVis)
+UpperWTP_riceonsetlong_prof=levelplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_Up,par.settings=RdBuTheme(),
+                                 margin=F, contour = TRUE, main="Upper WTP (Rs./ha) bound for rice onset long")
+
+UpperWTP_riceonsetlong_prof
+
+png("output/figures/UpperWTP_riceonsetlong_prof.png")
+UpperWTP_riceonsetlong_prof
+dev.off()
+
+# Lower bound ---------
+r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low)[t]<- m$CompMinPropSOSDBase*-1
+library(rasterVis)
+LowerWTP_riceonsetlong_prof=levelplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low,par.settings=RdBuTheme(),
+                                 margin=F, contour = TRUE, main="Lower WTP (Rs./ha) bound for rice onset long")
+LowerWTP_riceonsetlong_prof
+png("output/figures/LowerWTP_riceonsetlong_prof.png")
+LowerWTP_riceonsetlong_prof
+dev.off()
+
+
+
+
+
+
+### Fixed long versus onset_long_suppl ----------------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_fixedlong_onset_long_suppl_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_onset_long_suppl_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_long_suppl_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_onset_long_suppl_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat profit :Onset long suppl more beneficial than fixed long strategy")
+
+
+rice_wheat_onset_long_suppl_pprof=gplot(r1_RA_rice_wheat_pprof_onset_long_suppl_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Onset long supplemental irrigation",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_onset_long_suppl_pprof
+
+ggsave("output/figures/rice_wheat_onset_long_suppl_pprof.png",dpi=300,width=6.88, height=4.16)
+
+### Fixed long versus onset medium ------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_onset_medium_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_medium_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_onset_medium_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat profit:Onset medium more beneficial than fixed long strategy")
+
+
+rice_wheat_onset_medium_pprof=gplot(r1_RA_rice_wheat_pprof_onset_medium_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Onset medium",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_onset_medium_pprof
+
+ggsave("output/figures/rice_wheat_onset_medium_pprof.png",dpi=300,width=6.88, height=4.16)
+
+## Fixed long versus onset medium suppl ------------------
+m <- read.csv("code/Octave_Bihar_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_suppl_pprof.csv")
+
+v <- as.vector(getValues(r1))
+t <- which(!is.na(v))
+
+r1_RA_rice_wheat_pprof_onset_medium_supp_fixedlong_c<- r1
+
+values(r1_RA_rice_wheat_pprof_onset_medium_supp_fixedlong_c)[t]<- m$Riskiness_Comp
+library(rasterVis)
+levelplot(r1_RA_rice_wheat_pprof_onset_medium_supp_fixedlong_c,par.settings=RdBuTheme(),margin=F, main="Rice-Wheat profit:Onset medium suppl more beneficial than fixed long strategy")
+
+
+rice_wheat_onset_medium_supp_pprof=gplot(r1_RA_rice_wheat_pprof_onset_medium_supp_fixedlong_c) +
+  geom_raster(aes(fill = factor(value)))+
+  scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
+  labs(x="Longitude",y="Latitude",title="Onset medium supplemental irrigation",fill="Willingness to pay")
+ppprofious_theme <- theme_set(theme_bw())
+rice_wheat_onset_medium_supp_pprof
+
+ggsave("output/figures/rice_wheat_onset_medium_supp_pprof.png",dpi=300,width=6.88, height=4.16)
+
+
