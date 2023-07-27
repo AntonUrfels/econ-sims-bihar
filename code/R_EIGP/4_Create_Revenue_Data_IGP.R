@@ -26,8 +26,6 @@ india_states <- "data/gadm40_IND_shp/gadm40_IND_1.shp"
 
 # loading key data ----------------------------------
 aoi <- raster(file_aoi)
-bihar <- readOGR(india_states)
-aoi <- bihar[bihar$NAME_1=="Bihar",]
 plot(aoi)
 
 # functions for loading data  ----------------------
@@ -116,23 +114,37 @@ generate_irrig_surface <- function() {
 
 # Spatial system revenue benefits -----------------------
 library(terra)
-rice_prices=raster("data/maxwell_interpolated_prices/Rice_SVCpriceModel.r.pred.mu.image.tif")
-wheat_prices=raster("data/maxwell_interpolated_prices/Wheat_SVCpriceModel.r.pred.mu.image.tif")
+library(raster)
+rice_prices=raster("data/maxwell_interpolated_prices/predicted_rice_price_RF_IGP.tiff")
+wheat_prices=raster("data/maxwell_interpolated_prices/predicted_wheat_price_RF_IGP.tiff")
 
-rice_prices=mask(rice_prices,aoi)
-wheat_prices=mask(wheat_prices,aoi)
+rice_prices_r = resample(rice_prices, y = r1, method = "bilinear")
+wheat_prices_r = resample(wheat_prices, y = r1, method = "bilinear")
 
 
 library(exactextractr)
 
-rice_prices_r = resample(rice_prices, y = r1, method = "bilinear")
-wheat_prices_r = resample(wheat_prices, y = r1, method = "bilinear")
-plot(wheat_prices_r)
+rice_prices_map=levelplot(rice_prices,par.settings=RdBuTheme(),margin=F, main="Rice prices (R/kg")
 
-levelplot(rice_prices_r,par.settings=RdBuTheme(),margin=F, main="Rice prices (R/kg")
-levelplot(wheat_prices_r,par.settings=RdBuTheme(),margin=F, main="Wheat prices (R/kg)")
-rice_wheat_price_ratio=rice_prices_r$Rice_SVCpriceModel.r.pred.mu.image/wheat_prices_r$Wheat_SVCpriceModel.r.pred.mu.image
-levelplot(rice_wheat_price_ratio,par.settings=RdBuTheme(),margin=F, main="Rice-wheat price ratio (R/kg)")
+png("output/figures_IGP/rice_prices_map_IGP.png")
+rice_prices_map
+dev.off()
+
+wheat_prices_map=levelplot(wheat_prices,par.settings=RdBuTheme(),margin=F, main="Wheat prices (R/kg)")
+
+png("output/figures_IGP/wheat_prices_map_IGP.png")
+wheat_prices_map
+dev.off()
+
+rice_wheat_price_ratio=rice_prices$predicted_rice_price_RF_IGP/wheat_prices$predicted_wheat_price_RF_IGP
+
+rice_wheat_prices_ratio_map=levelplot(rice_wheat_price_ratio,par.settings=RdBuTheme(),margin=F, main="Rice-wheat price ratio (R/kg)")
+
+png("output/figures_IGP/rice_wheat_prices_map_IGP.png")
+rice_wheat_prices_ratio_map
+dev.off()
+
+
 
 library(ncdf4)
 library(stars)
@@ -141,12 +153,9 @@ library(ncmeta)
 # Transform the ncdf4 file into a terra rast object
 
 ## Farmer practice
-farmer_practice_rast=rast(file1)
-plot(farmer_practice_rast)
-bihar_shape= bihar[bihar$NAME_1=="Bihar",]
-plot(bihar_shape)
-bihar_shape_terra=vect(bihar_shape)
-farmer_practice_rast_m=mask(farmer_practice_rast,bihar_shape_terra)
+farmer_practice_rast_m=rast(file1)
+plot(farmer_practice_rast_m)
+
 plot(farmer_practice_rast_m$`rice_yield_scen=1_38`)
 rice_farmer_practice_rast_m <- farmer_practice_rast_m[[1295:1327]]
 rice_farmer_practice_rast_m_stack=raster::stack(rice_farmer_practice_rast_m)
@@ -155,7 +164,7 @@ rice_farmer_practice_rast_m_stack_revenue=rice_farmer_practice_rast_m_stack*rice
 plot(rice_farmer_practice_rast_m_stack_revenue)
 rice_farmer_practice_rev<- rasterToPoints(rice_farmer_practice_rast_m_stack_revenue)
 
-write.csv(rice_farmer_practice_rev,"data/maxwell_interpolated_prices/rice_farmer_practice_rev.csv")
+write.csv(rice_farmer_practice_rev,"data/maxwell_interpolated_prices/rice_farmer_practice_rev_IGP.csv")
 
 ### wheat
 wheat_farmer_practice_rast_m <- farmer_practice_rast_m[[1903:1935]]
@@ -164,18 +173,17 @@ wheat_farmer_practice_rast_m_stack_revenue=wheat_farmer_practice_rast_m_stack*wh
 plot(wheat_farmer_practice_rast_m_stack_revenue)
 wheat_farmer_practice_rev<- rasterToPoints(wheat_farmer_practice_rast_m_stack_revenue)
 
-#write.csv(wheat_farmer_practice_rev,"data/maxwell_interpolated_pwheats/wheat_farmer_practice_rev.csv")
+write.csv(wheat_farmer_practice_rev,"data/maxwell_interpolated_prices/wheat_farmer_practice_rev_IGP.csv")
 
 ##########
 rice_wheat_farmer_practice_rast_m_stack_revenue=rice_farmer_practice_rast_m_stack_revenue+wheat_farmer_practice_rast_m_stack_revenue
 plot(rice_wheat_farmer_practice_rast_m_stack_revenue)
 rice_wheat_farmer_practice_rev=rasterToPoints(rice_wheat_farmer_practice_rast_m_stack_revenue)
-write.csv(rice_wheat_farmer_practice_rev,"data/maxwell_interpolated_prices/rice_wheat_farmer_practice_rev.csv")
+write.csv(rice_wheat_farmer_practice_rev,"data/maxwell_interpolated_prices/rice_wheat_farmer_practice_rev_IGP.csv")
 
 # Fixed long 
-fixed_long_rast=rast(file2)
-plot(fixed_long_rast)
-fixed_long_rast_m=mask(fixed_long_rast,bihar_shape_terra)
+fixed_long_rast_m=rast(file2)
+plot(fixed_long_rast_m)
 plot(fixed_long_rast_m$`rice_yield_scen=1_38`)
 rice_fixed_long_rast_m <- fixed_long_rast_m[[1295:1327]]
 rice_fixed_long_rast_m_stack=raster::stack(rice_fixed_long_rast_m)
@@ -184,10 +192,7 @@ rice_fixed_long_rast_m_stack_revenue=rice_fixed_long_rast_m_stack*rice_prices_r
 plot(rice_fixed_long_rast_m_stack_revenue)
 rice_fixed_long_rev<- rasterToPoints(rice_fixed_long_rast_m_stack_revenue)
 
-write.csv(rice_fixed_long_rev,"data/maxwell_interpolated_prices/rice_fixed_long_rev.csv")
-
-
-
+write.csv(rice_fixed_long_rev,"data/maxwell_interpolated_prices/rice_fixed_long_rev_IGP.csv")
 
 ### wheat
 wheat_fixed_long_rast_m <- fixed_long_rast_m[[1903:1935]]
@@ -196,22 +201,22 @@ wheat_fixed_long_rast_m_stack_revenue=wheat_fixed_long_rast_m_stack*wheat_prices
 plot(wheat_fixed_long_rast_m_stack_revenue)
 wheat_fixed_long_rev<- rasterToPoints(wheat_fixed_long_rast_m_stack_revenue)
 
-#write.csv(wheat_fixed_long_rev,"data/maxwell_interpolated_pwheats/wheat_fixed_long_rev.csv")
+write.csv(wheat_fixed_long_rev,"data/maxwell_interpolated_prices/wheat_fixed_long_rev_IGP.csv")
 
 ##########
 rice_wheat_fixed_long_rast_m_stack_revenue=rice_fixed_long_rast_m_stack_revenue+wheat_fixed_long_rast_m_stack_revenue
 plot(rice_wheat_fixed_long_rast_m_stack_revenue)
 rice_wheat_fixed_long_rev=rasterToPoints(rice_wheat_fixed_long_rast_m_stack_revenue)
-write.csv(rice_wheat_fixed_long_rev,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_rev.csv")
+write.csv(rice_wheat_fixed_long_rev,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_rev_IGP.csv")
 
 
 
 #scen <- c("baseline","fixed_long","onset_long","fixed_medium","onset_medium","onset_long_suppl","onset_medium_suppl")
+
 # Onset_long
 
-onset_long_rast=rast(file3)
-plot(onset_long_rast)
-onset_long_rast_m=mask(onset_long_rast,bihar_shape_terra)
+onset_long_rast_m=rast(file3)
+plot(onset_long_rast_m)
 plot(onset_long_rast_m$`rice_yield_scen=1_38`)
 rice_onset_long_rast_m <- onset_long_rast_m[[1295:1327]]
 rice_onset_long_rast_m_stack=raster::stack(rice_onset_long_rast_m)
@@ -220,7 +225,7 @@ rice_onset_long_rast_m_stack_revenue=rice_onset_long_rast_m_stack*rice_prices_r
 plot(rice_onset_long_rast_m_stack_revenue)
 rice_onset_long_rev<- rasterToPoints(rice_onset_long_rast_m_stack_revenue)
 
-write.csv(rice_onset_long_rev,"data/maxwell_interpolated_prices/rice_onset_long_rev.csv")
+write.csv(rice_onset_long_rev,"data/maxwell_interpolated_prices/rice_onset_long_rev_IGP.csv")
 
 
 
@@ -231,29 +236,18 @@ wheat_onset_long_rast_m_stack_revenue=wheat_onset_long_rast_m_stack*wheat_prices
 plot(wheat_onset_long_rast_m_stack_revenue)
 wheat_onset_long_rev<- rasterToPoints(wheat_onset_long_rast_m_stack_revenue)
 
-#write.csv(wheat_onset_long_rev,"data/maxwell_interpolated_pwheats/wheat_onset_long_rev.csv")
+write.csv(wheat_onset_long_rev,"data/maxwell_interpolated_prices/wheat_onset_long_rev_IGP.csv")
 
 ##########
 rice_wheat_onset_long_rast_m_stack_revenue=rice_onset_long_rast_m_stack_revenue+wheat_onset_long_rast_m_stack_revenue
 plot(rice_wheat_onset_long_rast_m_stack_revenue)
 rice_wheat_onset_long_rev=rasterToPoints(rice_wheat_onset_long_rast_m_stack_revenue)
-write.csv(rice_wheat_onset_long_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_long_rev.csv")
-
-
-
-
-
-
-
-
-
-
+write.csv(rice_wheat_onset_long_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_long_rev_IGP.csv")
 
 
 # fixed medium 
-fixed_medium_rast=rast(file4)
-plot(fixed_medium_rast)
-fixed_medium_rast_m=mask(fixed_medium_rast,bihar_shape_terra)
+fixed_medium_rast_m=rast(file4)
+plot(fixed_medium_rast_m)
 plot(fixed_medium_rast_m$`rice_yield_scen=1_38`)
 rice_fixed_medium_rast_m <- fixed_medium_rast_m[[1295:1327]]
 rice_fixed_medium_rast_m_stack=raster::stack(rice_fixed_medium_rast_m)
@@ -262,29 +256,27 @@ rice_fixed_medium_rast_m_stack_revenue=rice_fixed_medium_rast_m_stack*rice_price
 plot(rice_fixed_medium_rast_m_stack_revenue)
 rice_fixed_medium_rev<- rasterToPoints(rice_fixed_medium_rast_m_stack_revenue)
 
-write.csv(rice_fixed_medium_rev,"data/maxwell_interpolated_prices/rice_fixed_medium_rev.csv")
+write.csv(rice_fixed_medium_rev,"data/maxwell_interpolated_prices/rice_fixed_medium_rev_IGP.csv")
 
 ### wheat
 wheat_fixed_medium_rast_m <- fixed_medium_rast_m[[1903:1935]]### wheat
-wheat_fixed_medium_rast_m <- fixed_medium_rast_m[[1903:1935]]
 wheat_fixed_medium_rast_m_stack=raster::stack(wheat_fixed_medium_rast_m)
 wheat_fixed_medium_rast_m_stack_revenue=wheat_fixed_medium_rast_m_stack*wheat_prices_r
 plot(wheat_fixed_medium_rast_m_stack_revenue)
 wheat_fixed_medium_rev<- rasterToPoints(wheat_fixed_medium_rast_m_stack_revenue)
 
-#write.csv(wheat_fixed_medium_rev,"data/maxwell_interpolated_pwheats/wheat_fixed_medium_rev.csv")
+write.csv(wheat_fixed_medium_rev,"data/maxwell_interpolated_prices/wheat_fixed_medium_rev_IGP.csv")
 
 ##########
 rice_wheat_fixed_medium_rast_m_stack_revenue=rice_fixed_medium_rast_m_stack_revenue+wheat_fixed_medium_rast_m_stack_revenue
 plot(rice_wheat_fixed_medium_rast_m_stack_revenue)
 rice_wheat_fixed_medium_rev=rasterToPoints(rice_wheat_fixed_medium_rast_m_stack_revenue)
-write.csv(rice_wheat_fixed_medium_rev,"data/maxwell_interpolated_prices/rice_wheat_fixed_medium_rev.csv")
+write.csv(rice_wheat_fixed_medium_rev,"data/maxwell_interpolated_prices/rice_wheat_fixed_medium_rev_IGP.csv")
 
 
 #onset medium
-onset_medium_rast=rast(file5)
-plot(onset_medium_rast)
-onset_medium_rast_m=mask(onset_medium_rast,bihar_shape_terra)
+onset_medium_rast_m=rast(file5)
+plot(onset_medium_rast_m)
 plot(onset_medium_rast_m$`rice_yield_scen=1_38`)
 rice_onset_medium_rast_m <- onset_medium_rast_m[[1295:1327]]
 rice_onset_medium_rast_m_stack=raster::stack(rice_onset_medium_rast_m)
@@ -293,7 +285,7 @@ rice_onset_medium_rast_m_stack_revenue=rice_onset_medium_rast_m_stack*rice_price
 plot(rice_onset_medium_rast_m_stack_revenue)
 rice_onset_medium_rev<- rasterToPoints(rice_onset_medium_rast_m_stack_revenue)
 
-write.csv(rice_onset_medium_rev,"data/maxwell_interpolated_prices/rice_onset_medium_rev.csv")
+write.csv(rice_onset_medium_rev,"data/maxwell_interpolated_prices/rice_onset_medium_rev_IGP.csv")
 
 ### wheat
 wheat_onset_medium_rast_m <- onset_medium_rast_m[[1903:1935]]
@@ -302,20 +294,19 @@ wheat_onset_medium_rast_m_stack_revenue=wheat_onset_medium_rast_m_stack*wheat_pr
 plot(wheat_onset_medium_rast_m_stack_revenue)
 wheat_onset_medium_rev<- rasterToPoints(wheat_onset_medium_rast_m_stack_revenue)
 
-#write.csv(wheat_onset_medium_rev,"data/maxwell_interpolated_pwheats/wheat_onset_medium_rev.csv")
+write.csv(wheat_onset_medium_rev,"data/maxwell_interpolated_prices/wheat_onset_medium_rev_IGP.csv")
 
 ##########
 rice_wheat_onset_medium_rast_m_stack_revenue=rice_onset_medium_rast_m_stack_revenue+wheat_onset_medium_rast_m_stack_revenue
 plot(rice_wheat_onset_medium_rast_m_stack_revenue)
 rice_wheat_onset_medium_rev=rasterToPoints(rice_wheat_onset_medium_rast_m_stack_revenue)
-write.csv(rice_wheat_onset_medium_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_rev.csv")
+write.csv(rice_wheat_onset_medium_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_rev_IGP.csv")
 
 
 
 # onset_long_suppl
-onset_long_suppl_rast=rast(file6)
-plot(onset_long_suppl_rast)
-onset_long_suppl_rast_m=mask(onset_long_suppl_rast,bihar_shape_terra)
+onset_long_suppl_rast_m=rast(file6)
+plot(onset_long_suppl_rast_m)
 plot(onset_long_suppl_rast_m$`rice_yield_scen=1_38`)
 rice_onset_long_suppl_rast_m <- onset_long_suppl_rast_m[[1295:1327]]
 rice_onset_long_suppl_rast_m_stack=raster::stack(rice_onset_long_suppl_rast_m)
@@ -324,7 +315,7 @@ rice_onset_long_suppl_rast_m_stack_revenue=rice_onset_long_suppl_rast_m_stack*ri
 plot(rice_onset_long_suppl_rast_m_stack_revenue)
 rice_onset_long_suppl_rev<- rasterToPoints(rice_onset_long_suppl_rast_m_stack_revenue)
 
-write.csv(rice_onset_long_suppl_rev,"data/maxwell_interpolated_prices/rice_onset_long_suppl_rev.csv")
+write.csv(rice_onset_long_suppl_rev,"data/maxwell_interpolated_prices/rice_onset_long_suppl_rev_IGP.csv")
 
 
 ### wheat
@@ -334,21 +325,20 @@ wheat_onset_long_suppl_rast_m_stack_revenue=wheat_onset_long_suppl_rast_m_stack*
 plot(wheat_onset_long_suppl_rast_m_stack_revenue)
 wheat_onset_long_suppl_rev<- rasterToPoints(wheat_onset_long_suppl_rast_m_stack_revenue)
 
-#write.csv(wheat_onset_long_suppl_rev,"data/maxwell_interpolated_pwheats/wheat_onset_long_suppl_rev.csv")
+write.csv(wheat_onset_long_suppl_rev,"data/maxwell_interpolated_prices/wheat_onset_long_suppl_rev_IGP.csv")
 
 ##########
 rice_wheat_onset_long_suppl_rast_m_stack_revenue=rice_onset_long_suppl_rast_m_stack_revenue+wheat_onset_long_suppl_rast_m_stack_revenue
 plot(rice_wheat_onset_long_suppl_rast_m_stack_revenue)
 rice_wheat_onset_long_suppl_rev=rasterToPoints(rice_wheat_onset_long_suppl_rast_m_stack_revenue)
-write.csv(rice_wheat_onset_long_suppl_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_rev.csv")
+write.csv(rice_wheat_onset_long_suppl_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_rev_IGP.csv")
 
 
 
 
 # onset medium suppl
-onset_medium_suppl_rast=rast(file7)
-plot(onset_medium_suppl_rast)
-onset_medium_suppl_rast_m=mask(onset_medium_suppl_rast,bihar_shape_terra)
+onset_medium_suppl_rast_m=rast(file7)
+plot(onset_medium_suppl_rast_m)
 plot(onset_medium_suppl_rast_m$`rice_yield_scen=1_38`)
 
 rice_onset_medium_suppl_rast_m <- onset_medium_suppl_rast_m[[1295:1327]]
@@ -358,7 +348,7 @@ rice_onset_medium_suppl_rast_m_stack_revenue=rice_onset_medium_suppl_rast_m_stac
 plot(rice_onset_medium_suppl_rast_m_stack_revenue)
 rice_onset_medium_suppl_rev<- rasterToPoints(rice_onset_medium_suppl_rast_m_stack_revenue)
 
-write.csv(rice_onset_medium_suppl_rev,"data/maxwell_interpolated_prices/rice_onset_medium_suppl_rev.csv")
+write.csv(rice_onset_medium_suppl_rev,"data/maxwell_interpolated_prices/rice_onset_medium_suppl_rev_IGP.csv")
 
 
 ### wheat
@@ -368,15 +358,349 @@ wheat_onset_medium_suppl_rast_m_stack_revenue=wheat_onset_medium_suppl_rast_m_st
 plot(wheat_onset_medium_suppl_rast_m_stack_revenue)
 wheat_onset_medium_suppl_rev<- rasterToPoints(wheat_onset_medium_suppl_rast_m_stack_revenue)
 
-#write.csv(wheat_onset_medium_suppl_rev,"data/maxwell_interpolated_pwheats/wheat_onset_medium_suppl_rev.csv")
+write.csv(wheat_onset_medium_suppl_rev,"data/maxwell_interpolated_prices/wheat_onset_medium_suppl_rev_IGP.csv")
 
 ##########
 rice_wheat_onset_medium_suppl_rast_m_stack_revenue=rice_onset_medium_suppl_rast_m_stack_revenue+wheat_onset_medium_suppl_rast_m_stack_revenue
 plot(rice_wheat_onset_medium_suppl_rast_m_stack_revenue)
 rice_wheat_onset_medium_suppl_rev=rasterToPoints(rice_wheat_onset_medium_suppl_rast_m_stack_revenue)
-write.csv(rice_wheat_onset_medium_suppl_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_rev.csv")
+write.csv(rice_wheat_onset_medium_suppl_rev,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_rev_IGP.csv")
 
 ######
 
+
+# PARTIAL PROFITS --------
+
+## Import revenue files for all scenarios ------------------
+
+
+# rice_wheat_farmer_practice_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_farmer_practice_rev_IGP.csv")
+# rice_wheat_fixed_long_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_fixed_long_rev_IGP.csv")
+# rice_wheat_fixed_medium_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_fixed_medium_rev_IGP.csv")
+# rice_wheat_onset_medium_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_onset_medium_rev_IGP.csv")
+# rice_wheat_onset_long_suppl_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_rev_IGP.csv")
+# rice_wheat_onset_medium_suppl_rev=read.csv("data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_rev_IGP.csv")
+
+# Import irrigation raster files
+
+##baseline -----------------------------------------------------------
+baseline_diesel_irrig_costs=rast("output/baseline_diesel_irrig_costs.nc")
+baseline_electric_irrig_costs=rast("output/baseline_diesel_irrig_costs.nc")
+baseline_rented_irrig_costs=rast("output/baseline_diesel_irrig_costs.nc")
+
+plot(baseline_diesel_irrig_costs)
+# IGP <- readOGR(india_states)
+# IGP_shape= IGP[IGP$NAME_1=="IGP",]
+# plot(IGP_shape)
+# IGP_shape_terra=vect(IGP_shape)
+
+# Diesel
+baseline_diesel_irrig_costs_IGP_stack=raster::stack(baseline_diesel_irrig_costs)
+baseline_diesel_irrig_costs_IGP_stack_Rupees_ha=baseline_diesel_irrig_costs_IGP_stack*80
+plot(baseline_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_farmer_practice_rast_m_stack_diesel_profit=rice_wheat_farmer_practice_rast_m_stack_revenue-baseline_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_farmer_practice_rast_m_stack_diesel_profit)
+
+rice_wheat_farmer_practice_diesel_profit_pt=rasterToPoints(rice_wheat_farmer_practice_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_farmer_practice_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_farmer_practice_diesel_profit_pt_IGP.csv")
+
+library(raster)
+#writeRaster(baseline_diesel_irrig_costs_IGP_stack_Rupees_ha,"data/maxwell_interpolated_prices/baseline_diesel_irrig_costs_IGP_stack_Rupees_ha_IGP.tif")
+baseline_diesel_irrig_costs_IGP_stack_Rupees_ha_pt=rasterToPoints(baseline_diesel_irrig_costs_IGP_stack_Rupees_ha)
+write.csv(baseline_diesel_irrig_costs_IGP_stack_Rupees_ha_pt,"data/maxwell_interpolated_prices/baseline_diesel_irrig_costs_IGP_stack_Rupees_ha_pt_IGP.csv")
+
+
+
+
+
+
+# Electric irrigation
+baseline_electric_irrig_costs_IGP_stack=raster::stack(baseline_electric_irrig_costs)
+baseline_electric_irrig_costs_IGP_stack_Rupees_ha=baseline_electric_irrig_costs_IGP_stack*80
+plot(baseline_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_farmer_practice_rast_m_stack_electric_profit=rice_wheat_farmer_practice_rast_m_stack_revenue-baseline_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_farmer_practice_rast_m_stack_electric_profit)
+
+rice_wheat_farmer_practice_electric_profit_pt=rasterToPoints(rice_wheat_farmer_practice_rast_m_stack_electric_profit)
+write.csv(rice_wheat_farmer_practice_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_farmer_practice_electric_profit_pt_IGP.csv")
+
+# Rented irrigation
+baseline_rented_irrig_costs_IGP_stack=raster::stack(baseline_rented_irrig_costs)
+baseline_rented_irrig_costs_IGP_stack_Rupees_ha=baseline_rented_irrig_costs_IGP_stack*80
+plot(baseline_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_farmer_practice_rast_m_stack_rented_profit=rice_wheat_farmer_practice_rast_m_stack_revenue-baseline_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_farmer_practice_rast_m_stack_rented_profit)
+
+rice_wheat_farmer_practice_rented_profit_pt=rasterToPoints(rice_wheat_farmer_practice_rast_m_stack_rented_profit)
+write.csv(rice_wheat_farmer_practice_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_farmer_practice_rented_profit_pt_IGP.csv")
+
+
+library(raster)
+writeRaster(baseline_rented_irrig_costs_IGP_stack_Rupees_ha,"data/maxwell_interpolated_prices/baseline_rented_irrig_costs_IGP_stack_Rupees_ha_IGP.tif")
+baseline_rented_irrig_costs_IGP_stack_Rupees_ha_pt=rasterToPoints(baseline_rented_irrig_costs_IGP_stack_Rupees_ha)
+write.csv(baseline_rented_irrig_costs_IGP_stack_Rupees_ha_pt,"data/maxwell_interpolated_prices/baseline_rented_irrig_costs_IGP_stack_Rupees_ha_pt_IGP.csv")
+
+
+
+
+## fixed long -------------------
+fixed_long_diesel_irrig_costs=rast("output/fixed_long_diesel_irrig_costs.nc")
+fixed_long_electric_irrig_costs=rast("output/fixed_long_diesel_irrig_costs.nc")
+fixed_long_rented_irrig_costs=rast("output/fixed_long_diesel_irrig_costs.nc")
+
+# plot(fixed_long_diesel_irrig_costs)
+# IGP <- readOGR(india_states)
+# IGP_shape= IGP[IGP$NAME_1=="IGP",]
+# plot(IGP_shape)
+# IGP_shape_terra=vect(IGP_shape)
+
+# Diesel
+# fixed_long_diesel_irrig_costs_IGP=mask(fixed_long_diesel_irrig_costs,IGP_shape_terra)
+# plot(fixed_long_diesel_irrig_costs_IGP)
+fixed_long_diesel_irrig_costs_IGP_stack=raster::stack(fixed_long_diesel_irrig_costs)
+fixed_long_diesel_irrig_costs_IGP_stack_Rupees_ha=fixed_long_diesel_irrig_costs_IGP_stack*80
+plot(fixed_long_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_long_rast_m_stack_diesel_profit=rice_wheat_fixed_long_rast_m_stack_revenue-fixed_long_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_long_rast_m_stack_diesel_profit)
+
+rice_wheat_fixed_long_diesel_profit_pt=rasterToPoints(rice_wheat_fixed_long_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_fixed_long_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_diesel_profit_pt_IGP.csv")
+
+
+
+
+# Electric irrigation
+fixed_long_electric_irrig_costs_IGP_stack=raster::stack(fixed_long_electric_irrig_costs)
+fixed_long_electric_irrig_costs_IGP_stack_Rupees_ha=fixed_long_electric_irrig_costs_IGP_stack*80
+plot(fixed_long_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_long_rast_m_stack_electric_profit=rice_wheat_fixed_long_rast_m_stack_revenue-fixed_long_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_long_rast_m_stack_electric_profit)
+
+rice_wheat_fixed_long_electric_profit_pt=rasterToPoints(rice_wheat_fixed_long_rast_m_stack_electric_profit)
+write.csv(rice_wheat_fixed_long_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_electric_profit_pt_IGP.csv")
+
+
+
+# Rented irrigation
+fixed_long_rented_irrig_costs_IGP_stack=raster::stack(fixed_long_rented_irrig_costs)
+fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha=fixed_long_rented_irrig_costs_IGP_stack*80
+plot(fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_long_rast_m_stack_rented_profit=rice_wheat_fixed_long_rast_m_stack_revenue-fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_long_rast_m_stack_rented_profit)
+
+rice_wheat_fixed_long_rented_profit_pt=rasterToPoints(rice_wheat_fixed_long_rast_m_stack_rented_profit)
+write.csv(rice_wheat_fixed_long_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_rented_profit_pt_IGP.csv")
+
+
+library(raster)
+writeRaster(fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha_IGP.tif")
+rice_wheat_fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt=rasterToPoints(fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha)
+write.csv(rice_wheat_fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt_IGP.csv")
+
+
+
+
+
+## fixed medium --------------------------------------
+fixed_medium_diesel_irrig_costs=rast("output/fixed_medium_diesel_irrig_costs.nc")
+fixed_medium_electric_irrig_costs=rast("output/fixed_medium_diesel_irrig_costs.nc")
+fixed_medium_rented_irrig_costs=rast("output/fixed_medium_diesel_irrig_costs.nc")
+
+# Diesel
+fixed_medium_diesel_irrig_costs_IGP_stack=raster::stack(fixed_medium_diesel_irrig_costs)
+fixed_medium_diesel_irrig_costs_IGP_stack_Rupees_ha=fixed_medium_diesel_irrig_costs_IGP_stack*80
+plot(fixed_medium_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_medium_rast_m_stack_diesel_profit=rice_wheat_fixed_medium_rast_m_stack_revenue-fixed_medium_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_medium_rast_m_stack_diesel_profit)
+
+rice_wheat_fixed_medium_diesel_profit_pt=rasterToPoints(rice_wheat_fixed_medium_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_fixed_medium_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_medium_diesel_profit_pt_IGP.csv")
+
+
+# Electric irrigation
+fixed_medium_electric_irrig_costs_IGP_stack=raster::stack(fixed_medium_electric_irrig_costs)
+fixed_medium_electric_irrig_costs_IGP_stack_Rupees_ha=fixed_medium_electric_irrig_costs_IGP_stack*80
+plot(fixed_medium_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_medium_rast_m_stack_electric_profit=rice_wheat_fixed_medium_rast_m_stack_revenue-fixed_medium_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_medium_rast_m_stack_electric_profit)
+
+rice_wheat_fixed_medium_electric_profit_pt=rasterToPoints(rice_wheat_fixed_medium_rast_m_stack_electric_profit)
+write.csv(rice_wheat_fixed_medium_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_medium_electric_profit_pt_IGP.csv")
+
+
+# Rented irrigation
+fixed_medium_rented_irrig_costs_IGP_stack=raster::stack(fixed_medium_rented_irrig_costs)
+fixed_medium_rented_irrig_costs_IGP_stack_Rupees_ha=fixed_medium_rented_irrig_costs_IGP_stack*80
+plot(fixed_medium_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_fixed_medium_rast_m_stack_rented_profit=rice_wheat_fixed_medium_rast_m_stack_revenue-fixed_medium_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_fixed_medium_rast_m_stack_rented_profit)
+
+rice_wheat_fixed_medium_rented_profit_pt=rasterToPoints(rice_wheat_fixed_medium_rast_m_stack_rented_profit)
+write.csv(rice_wheat_fixed_medium_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_fixed_medium_rented_profit_pt_IGP.csv")
+
+
+## onset long -------------------------------------------------
+onset_long_diesel_irrig_costs=rast("output/onset_long_diesel_irrig_costs.nc")
+onset_long_electric_irrig_costs=rast("output/onset_long_diesel_irrig_costs.nc")
+onset_long_rented_irrig_costs=rast("output/onset_long_diesel_irrig_costs.nc")
+
+onset_long_diesel_irrig_costs_IGP_stack=raster::stack(onset_long_diesel_irrig_costs)
+onset_long_diesel_irrig_costs_IGP_stack_Rupees_ha=onset_long_diesel_irrig_costs_IGP_stack*80
+plot(onset_long_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_rast_m_stack_diesel_profit=rice_wheat_onset_long_rast_m_stack_revenue-onset_long_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_rast_m_stack_diesel_profit)
+
+rice_wheat_onset_long_diesel_profit_pt=rasterToPoints(rice_wheat_onset_long_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_onset_long_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_diesel_profit_pt_IGP.csv")
+
+
+
+# Electric irrigation
+onset_long_electric_irrig_costs_IGP_stack=raster::stack(onset_long_electric_irrig_costs)
+onset_long_electric_irrig_costs_IGP_stack_Rupees_ha=onset_long_electric_irrig_costs_IGP_stack*80
+plot(onset_long_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_rast_m_stack_electric_profit=rice_wheat_onset_long_rast_m_stack_revenue-onset_long_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_rast_m_stack_electric_profit)
+
+rice_wheat_onset_long_electric_profit_pt=rasterToPoints(rice_wheat_onset_long_rast_m_stack_electric_profit)
+write.csv(rice_wheat_onset_long_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_electric_profit_pt_IGP.csv")
+
+
+
+# Rented irrigation
+onset_long_rented_irrig_costs_IGP_stack=raster::stack(onset_long_rented_irrig_costs)
+onset_long_rented_irrig_costs_IGP_stack_Rupees_ha=onset_long_rented_irrig_costs_IGP_stack*80
+plot(onset_long_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_rast_m_stack_rented_profit=rice_wheat_onset_long_rast_m_stack_revenue-onset_long_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_rast_m_stack_rented_profit)
+
+
+rice_wheat_onset_long_rented_profit_pt=rasterToPoints(rice_wheat_onset_long_rast_m_stack_rented_profit)
+write.csv(rice_wheat_onset_long_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_rented_profit_pt_IGP.csv")
+
+
+library(raster)
+writeRaster(onset_long_rented_irrig_costs_IGP_stack_Rupees_ha,"data/maxwell_interpolated_prices/onset_long_rented_irrig_costs_IGP_stack_Rupees_ha_IGP.tif")
+onset_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt=rasterToPoints(onset_long_rented_irrig_costs_IGP_stack_Rupees_ha)
+write.csv(onset_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt,"data/maxwell_interpolated_prices/onset_long_rented_irrig_costs_IGP_stack_Rupees_ha_pt_IGP.csv")
+
+
+
+
+
+
+## onset long suppl -----------
+onset_long_suppl_diesel_irrig_costs=rast("output/onset_long_suppl_diesel_irrig_costs.nc")
+onset_long_suppl_electric_irrig_costs=rast("output/onset_long_suppl_diesel_irrig_costs.nc")
+onset_long_suppl_rented_irrig_costs=rast("output/onset_long_suppl_diesel_irrig_costs.nc")
+
+onset_long_suppl_diesel_irrig_costs_IGP_stack=raster::stack(onset_long_suppl_diesel_irrig_costs)
+onset_long_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha=onset_long_suppl_diesel_irrig_costs_IGP_stack*80
+plot(onset_long_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_suppl_rast_m_stack_diesel_profit=rice_wheat_onset_long_suppl_rast_m_stack_revenue-onset_long_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_suppl_rast_m_stack_diesel_profit)
+
+rice_wheat_onset_long_suppl_diesel_profit_pt=rasterToPoints(rice_wheat_onset_long_suppl_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_onset_long_suppl_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_diesel_profit_pt_IGP.csv")
+
+
+
+# Electric irrigation
+onset_long_suppl_electric_irrig_costs_IGP_stack=raster::stack(onset_long_suppl_electric_irrig_costs)
+onset_long_suppl_electric_irrig_costs_IGP_stack_Rupees_ha=onset_long_suppl_electric_irrig_costs_IGP_stack*80
+plot(onset_long_suppl_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_suppl_rast_m_stack_electric_profit=rice_wheat_onset_long_suppl_rast_m_stack_revenue-onset_long_suppl_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_suppl_rast_m_stack_electric_profit)
+
+
+rice_wheat_onset_long_suppl_electric_profit_pt=rasterToPoints(rice_wheat_onset_long_suppl_rast_m_stack_electric_profit)
+write.csv(rice_wheat_onset_long_suppl_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_electric_profit_pt_IGP.csv")
+
+# Rented irrigation
+onset_long_suppl_rented_irrig_costs_IGP_stack=raster::stack(onset_long_suppl_rented_irrig_costs)
+onset_long_suppl_rented_irrig_costs_IGP_stack_Rupees_ha=onset_long_suppl_rented_irrig_costs_IGP_stack*80
+plot(onset_long_suppl_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_long_suppl_rast_m_stack_rented_profit=rice_wheat_onset_long_suppl_rast_m_stack_revenue-onset_long_suppl_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_long_suppl_rast_m_stack_rented_profit)
+
+
+rice_wheat_onset_long_suppl_rented_profit_pt=rasterToPoints(rice_wheat_onset_long_suppl_rast_m_stack_rented_profit)
+write.csv(rice_wheat_onset_long_suppl_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_long_suppl_rented_profit_pt_IGP.csv")
+
+
+
+## onset medium ------------------------
+onset_medium_diesel_irrig_costs=rast("output/onset_medium_diesel_irrig_costs.nc")
+onset_medium_electric_irrig_costs=rast("output/onset_medium_diesel_irrig_costs.nc")
+onset_medium_rented_irrig_costs=rast("output/onset_medium_diesel_irrig_costs.nc")
+
+onset_medium_diesel_irrig_costs_IGP_stack=raster::stack(onset_medium_diesel_irrig_costs)
+onset_medium_diesel_irrig_costs_IGP_stack_Rupees_ha=onset_medium_diesel_irrig_costs_IGP_stack*80
+plot(onset_medium_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_rast_m_stack_diesel_profit=rice_wheat_onset_medium_rast_m_stack_revenue-onset_medium_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_rast_m_stack_diesel_profit)
+
+
+rice_wheat_onset_medium__diesel_profit_pt=rasterToPoints(rice_wheat_onset_medium_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_onset_medium__diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium__diesel_profit_pt_IGP.csv")
+
+
+# Electric irrigation
+onset_medium_electric_irrig_costs_IGP_stack=raster::stack(onset_medium_electric_irrig_costs)
+onset_medium_electric_irrig_costs_IGP_stack_Rupees_ha=onset_medium_electric_irrig_costs_IGP_stack*80
+plot(onset_medium_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_rast_m_stack_electric_profit=rice_wheat_onset_medium_rast_m_stack_revenue-onset_medium_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_rast_m_stack_electric_profit)
+
+rice_wheat_onset_medium__electric_profit_pt=rasterToPoints(rice_wheat_onset_medium_rast_m_stack_electric_profit)
+write.csv(rice_wheat_onset_medium__electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium__electric_profit_pt_IGP.csv")
+
+
+
+# Rented irrigation
+onset_medium_rented_irrig_costs_IGP_stack=raster::stack(onset_medium_rented_irrig_costs)
+onset_medium_rented_irrig_costs_IGP_stack_Rupees_ha=onset_medium_rented_irrig_costs_IGP_stack*80
+plot(onset_medium_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_rast_m_stack_rented_profit=rice_wheat_onset_medium_rast_m_stack_revenue-onset_medium_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_rast_m_stack_rented_profit)
+
+rice_wheat_onset_medium_rented_profit_pt=rasterToPoints(rice_wheat_onset_medium_rast_m_stack_rented_profit)
+write.csv(rice_wheat_onset_medium_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_rented_profit_pt_IGP.csv")
+
+
+
+## onset medium suppl ----------------------------------
+onset_medium_suppl_diesel_irrig_costs=rast("output/onset_medium_suppl_diesel_irrig_costs.nc")
+onset_medium_suppl_electric_irrig_costs=rast("output/onset_medium_suppl_diesel_irrig_costs.nc")
+onset_medium_suppl_rented_irrig_costs=rast("output/onset_medium_suppl_diesel_irrig_costs.nc")
+
+onset_medium_suppl_diesel_irrig_costs_IGP_stack=raster::stack(onset_medium_suppl_diesel_irrig_costs)
+onset_medium_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha=onset_medium_suppl_diesel_irrig_costs_IGP_stack*80
+plot(onset_medium_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_suppl_rast_m_stack_diesel_profit=rice_wheat_onset_medium_suppl_rast_m_stack_revenue-onset_medium_suppl_diesel_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_suppl_rast_m_stack_diesel_profit)
+
+rice_wheat_onset_medium_suppl_diesel_profit_pt=rasterToPoints(rice_wheat_onset_medium_suppl_rast_m_stack_diesel_profit)
+write.csv(rice_wheat_onset_medium_suppl_diesel_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_diesel_profit_pt_IGP.csv")
+
+# Electric irrigation
+onset_medium_suppl_electric_irrig_costs_IGP_stack=raster::stack(onset_medium_suppl_electric_irrig_costs)
+onset_medium_suppl_electric_irrig_costs_IGP_stack_Rupees_ha=onset_medium_suppl_electric_irrig_costs_IGP_stack*80
+plot(onset_medium_suppl_electric_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_suppl_rast_m_stack_electric_profit=rice_wheat_onset_medium_suppl_rast_m_stack_revenue-onset_medium_suppl_electric_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_suppl_rast_m_stack_electric_profit)
+
+rice_wheat_onset_medium_suppl_electric_profit_pt=rasterToPoints(rice_wheat_onset_medium_suppl_rast_m_stack_electric_profit)
+write.csv(rice_wheat_onset_medium_suppl_electric_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_electric_profit_pt_IGP.csv")
+
+# Rented irrigation
+onset_medium_suppl_rented_irrig_costs_IGP_stack=raster::stack(onset_medium_suppl_rented_irrig_costs)
+onset_medium_suppl_rented_irrig_costs_IGP_stack_Rupees_ha=onset_medium_suppl_rented_irrig_costs_IGP_stack*80
+plot(onset_medium_suppl_rented_irrig_costs_IGP_stack_Rupees_ha)
+rice_wheat_onset_medium_suppl_rast_m_stack_rented_profit=rice_wheat_onset_medium_suppl_rast_m_stack_revenue-onset_medium_suppl_rented_irrig_costs_IGP_stack_Rupees_ha
+plot(rice_wheat_onset_medium_suppl_rast_m_stack_rented_profit)
+
+rice_wheat_onset_medium_suppl_rented_profit_pt=rasterToPoints(rice_wheat_onset_medium_suppl_rast_m_stack_rented_profit)
+write.csv(rice_wheat_onset_medium_suppl_rented_profit_pt,"data/maxwell_interpolated_prices/rice_wheat_onset_medium_suppl_rented_profit_pt_IGP.csv")
 
 

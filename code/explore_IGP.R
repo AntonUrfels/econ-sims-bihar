@@ -173,7 +173,7 @@ levelplot(r1_c,par.settings=RdBuTheme(),margin=F)
 #r <- load_sims(files,"rice_yield",aoi,NA)
 #getValues()
 
-# Max additional code for mapping the results ------------------------------
+# Max additional code for mapping the risk optimization results -----------
 
 ## Rice -------------------------------------------------------------------
 
