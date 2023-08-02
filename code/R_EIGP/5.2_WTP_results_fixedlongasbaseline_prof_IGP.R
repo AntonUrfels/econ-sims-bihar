@@ -6,12 +6,12 @@ library(dplyr)
 # Import RA --------------------------------------------------------------------
 
 ## RICE-WHEAT -----------------------------------------------------
-RA_rice_wheat_farmer_practice_fixedlong<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_farmer_practice_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-RA_rice_wheat_fixedlong_fixedmedium<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_fixedmedium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-RA_rice_wheat_fixedlong_onset_long<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_long_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-RA_rice_wheat_fixedlong_onset_medium<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-RA_rice_wheat_fixedlong_onset_long_suppl<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-RA_rice_wheat_fixedlong_onset_medium_suppl<- import("code/Octace_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_farmer_practice_fixedlong<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_farmer_practice_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_fixedlong_fixedmedium<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_fixedmedium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_fixedlong_onset_long<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_long_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_fixedlong_onset_medium<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_fixedlong_onset_long_suppl<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_rice_wheat_fixedlong_onset_medium_suppl<- import("code/Octave_IGP_PartialProfit/RA_rice_wheat_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
 
 
 
@@ -91,12 +91,12 @@ names(RA_rice_wheat_fixedlong_onset_medium_suppl)[1:25]=c("CellID","CompID","Bas
                                                           "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaserevenue","MinProp_BaseSOSDComp_Divdbaserevenue",
                                                           "Riskiness_Comp","RiceArea")
 
-write.csv(RA_rice_wheat_farmer_practice_fixedlong,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_farmer_practice_fixedlong_rev_IGP.csv")
-write.csv(RA_rice_wheat_fixedlong_fixedmedium,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_fixedlong_fixedmedium_rev_IGP.csv")
-write.csv(RA_rice_wheat_fixedlong_onset_long,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_fixedlong_onset_long_rev_IGP.csv")
-write.csv(RA_rice_wheat_fixedlong_onset_medium,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_fixedlong_onset_medium_rev_IGP.csv")
-write.csv(RA_rice_wheat_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_fixedlong_onset_long_suppl_rev_IGP.csv")
-write.csv(RA_rice_wheat_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_revenue_IGP/RA_rice_wheat_fixedlong_onset_medium_suppl_rev_IGP.csv")
+write.csv(RA_rice_wheat_farmer_practice_fixedlong,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_farmer_practice_fixedlong_prof_IGP.csv")
+write.csv(RA_rice_wheat_fixedlong_fixedmedium,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_fixedlong_fixedmedium_prof_IGP.csv")
+write.csv(RA_rice_wheat_fixedlong_onset_long,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_fixedlong_onset_long_prof_IGP.csv")
+write.csv(RA_rice_wheat_fixedlong_onset_medium,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_fixedlong_onset_medium_prof_IGP.csv")
+write.csv(RA_rice_wheat_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_fixedlong_onset_long_suppl_prof_IGP.csv")
+write.csv(RA_rice_wheat_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_prof_IGP/RA_rice_wheat_fixedlong_onset_medium_suppl_prof_IGP.csv")
 
 # # Import Descriptive stats -------------------------------
 # %   1 = Weighted Mean   UB
@@ -130,12 +130,12 @@ Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Perce
 
 Statistics=as.data.frame(Statistics)
 
-DescriptiveStat_Rice_farmer_practice_fixedlong<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_farmer_practice_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_fixedmedium<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_fixedmedium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_long<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_onset_long_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_medium<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_long_suppl<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_medium_suppl<- import("code/Octace_IGP_Revenue/DescriptiveStat_rice_wheat_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_farmer_practice_fixedlong<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_farmer_practice.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_fixedmedium<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long_suppl<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium_suppl<- import("code/Octave_IGP_PartialProfit/DescriptiveStat_rice_wheat_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
 
 
 DescriptiveStat_Rice_Wheat_All_Scenarios=bind_cols(Statistics,DescriptiveStat_Rice_farmer_practice_fixedlong,
@@ -149,4 +149,4 @@ names(DescriptiveStat_Rice_Wheat_All_Scenarios)[1:7]=c("Statistics","Rice_Wheat_
                                                        "Rice_Wheat_onset_long_suppl","Rice_Wheat_onset_medium","Rice_Wheat_onset_medium_suppl")
 
 
-write.csv(DescriptiveStat_Rice_Wheat_All_Scenarios,"DescriptiveStat_Rice_Wheat_All_Scenarios_revenue_IGP.csv")
+write.csv(DescriptiveStat_Rice_Wheat_All_Scenarios,"data/maxwell_output_fixedLong_prof_IGP/DescriptiveStat_Rice_Wheat_All_Scenarios_Prof_IGP.csv")

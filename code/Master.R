@@ -1,17 +1,16 @@
 # Run the following code chronologically 
-# install.packages("pacman")
-pacman::p_load(stringr, readxl, lubridate, readr, MASS, copula, gridExtra, ggpubr, fdrtool, dplyr, ggplot2, rootSolve)
 
 
-#Set working directory
-setwd("##INPUT##")
+# Bihar Models ------------
+source("explore.R")
 
-# Bihar Models
-#Create Figure 1
+##Yield ------------ 
+#Run R code to create data file for optimization in Octave
 source("code/R_Bihar/1_WTP_fixedlongasbaseline_Bihar.R")
 
-#Creates Figures 2-3
-source("Code/.R")
+# Run Octave Code in folder "Octave_Bihar"
+
+
 
 #Creates Figures 4-5, A1
 source("Code/.R")
@@ -22,4 +21,15 @@ source("Code/.R")
 #Creates Figures 9 
 source("Code/HMS_AJAE_PolicySim4.R")
 
-# IGP Models
+# IGP Models ------------------
+source("explore.R")
+
+## Yield 
+
+
+
+## Revenue
+
+
+
+## Partial profits
