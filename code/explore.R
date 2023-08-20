@@ -102,7 +102,11 @@ r1 <- r[[1]][[1]]
 
 m <- read.csv("data/maxwell_output_fixedLong/RA_Wheat_fixedlong_onset_medium_suppl_c.csv")
 
+<<<<<<< Updated upstream
 v <- as.vector(getValues(r1))
+=======
+
+>>>>>>> Stashed changes
 t <- which(!is.na(v))
 
 #
