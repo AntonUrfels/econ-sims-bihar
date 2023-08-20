@@ -150,5 +150,5 @@ names(DescriptiveStat_Rice_Wheat_All_Scenarios)[1:7]=c("Statistics","Rice_Wheat_
                                                        "Rice_Wheat_onset_long_suppl","Rice_Wheat_onset_medium","Rice_Wheat_onset_medium_suppl")
 
 
-write.csv(DescriptiveStat_Rice_Wheat_All_Scenarios,"DescriptiveStat_Rice_Wheat_All_Scenarios_revenue_IGP.csv")
+write.csv(DescriptiveStat_Rice_Wheat_All_Scenarios,"code/Octace_IGP_Revenue/DescriptiveStat_Rice_Wheat_All_Scenarios_revenue_IGP.csv")
 

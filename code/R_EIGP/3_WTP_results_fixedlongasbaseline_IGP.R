@@ -115,9 +115,6 @@ write.csv(RA_Rice_fixedlong_onset_medium,"data/maxwell_output_fixedLong_IGP/RA_R
 write.csv(RA_Rice_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_long_suppl_c_IGP.csv")
 write.csv(RA_Rice_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_medium_suppl_c_IGP.csv")
 
-
-
-
 ## WHEAT --------------------------------------------
 RA_Wheat_fixedlong_farmerpractice<- import("code/Octave_EIGP/RA_wheat_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
 RA_Wheat_fixedlong_fixedmedium<- import("code/Octave_EIGP/RA_Wheat_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
@@ -229,35 +226,6 @@ write.csv(RA_Wheat_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_IGP
 write.csv(RA_Wheat_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_medium_suppl_c_IGP.csv")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#############################STOPED HERE########################################
 # Import Descriptive stats -------------------------------
 # %   1 = Weighted Mean   UB
 # %   2 = Weighted S.D.   UB
@@ -290,12 +258,12 @@ Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Perce
 
 Statistics=as.data.frame(Statistics)
 
-DescriptiveStat_Rice_baseline_fixedlong<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_fixedmedium<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_long<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_long_suppl<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_medium<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Rice_fixedlong_onset_medium_suppl<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_baseline_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_fixedmedium<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_fixedmedium_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_long_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
 
 
 DescriptiveStat_Rice_All_Scenarios=bind_cols(Statistics,DescriptiveStat_Rice_baseline_fixedlong,
@@ -309,7 +277,7 @@ names(DescriptiveStat_Rice_All_Scenarios)[1:7]=c("Statistics","Rice_farmerpracti
                                                  "Rice_onset_long_suppl","Rice_onset_medium","Rice_onset_medium_suppl")
 
 
-write.csv(DescriptiveStat_Rice_All_Scenarios,"D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Rice_All_Scenarios_FixedLongasBaseline.csv")
+write.csv(DescriptiveStat_Rice_All_Scenarios,"code/Octave_EIGP/DescriptiveStat_Rice_All_Scenarios_FixedlongasBaseline_IGP.csv")
 
 ## Wheat -------------------------
 Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Percentile25_UB","Median_UB","Percentile75_UB","Percentile90_UB","Max_UB",
@@ -318,12 +286,12 @@ Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Perce
 
 Statistics=as.data.frame(Statistics)
 
-DescriptiveStat_Wheat_baseline_fixedlong<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Wheat_fixedlong_fixedmedium<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Wheat_fixedlong_onset_long<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Wheat_fixedlong_onset_long_suppl<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Wheat_fixedlong_onset_medium<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
-DescriptiveStat_Wheat_fixedlong_onset_medium_suppl<- import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_baseline_fixedlong<- import("code/Octave_EIGP/DescriptiveStat_Wheat_baseline_fixedlong_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_fixedmedium<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_fixedmedium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_long<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_long_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_medium<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
 
 
 DescriptiveStat_Wheat_All_Scenarios=bind_cols(Statistics,DescriptiveStat_Wheat_baseline_fixedlong,
@@ -337,8 +305,54 @@ names(DescriptiveStat_Wheat_All_Scenarios)[1:7]=c("Statistics","Wheat_farmerprac
                                                   "Wheat_onset_long_suppl","Wheat_onset_medium","Wheat_onset_medium_suppl")
 
 
-write.csv(DescriptiveStat_Wheat_All_Scenarios,"D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/DescriptiveStat_Wheat_All_Scenarios_FixedlongasBaseline.csv")
-write.csv(DescriptiveStat_Wheat_All_Scenarios,"DescriptiveStat_Wheat_All_Scenarios_FixedlongasBaseline.csv")
+write.csv(DescriptiveStat_Wheat_All_Scenarios,"code/Octave_EIGP/DescriptiveStat_Wheat_All_Scenarios_FixedlongasBaseline_IGP.csv")
+
+
+
+# Calculate descriptive statistics for Rice: OCTAVE CODE Produced wrong max ---------
+# Farmer practice
+# DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/RA_Rice_fixedlong_farmerpractice_c_IGP.csv")
+# DescriptiveStat_Rice_baseline_fixedlong$LowerBound=(DescriptiveStat_Rice_baseline_fixedlong$CompMinPropSOSDBase*-1)/1000
+# DescriptiveStat_Rice_baseline_fixedlong$UpperBound=(DescriptiveStat_Rice_baseline_fixedlong$BaseMinPropSOSDComp*-1)/1000
+# 
+# library(fastDummies)
+# DescriptiveStat_Rice_baseline_fixedlong <- fastDummies::dummy_cols(DescriptiveStat_Rice_baseline_fixedlong, select_columns = "Riskiness_Comp")
+# DescriptiveStat_Rice_baseline_fixedlong_small=subset(DescriptiveStat_Rice_baseline_fixedlong, 
+#                     select=c("LowerBound","UpperBound", "Riskiness_Comp_-1",
+#                     "Riskiness_Comp_0","Riskiness_Comp_1"))
+# library(modelsummary)
+# baseline_fixedlong_skim=skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# 
+# 
+# lb=quantile(DescriptiveStat_Rice_baseline_fixedlong_small$LowerBound, probs = seq(.1, .9, by = .1))
+# ub=quantile(DescriptiveStat_Rice_baseline_fixedlong_small$UpperBound, probs = seq(.1, .9, by = .1))
+# 
+# 
+# # Fixed medium
+# DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/RA_Rice_fixedlong_fixedmedium_c_IGP.csv")
+# library(fastDummies)
+# DescriptiveStat_Rice_baseline_fixedlong <- fastDummies::dummy_cols(DescriptiveStat_Rice_baseline_fixedlong, select_columns = "Riskiness_Comp")
+# DescriptiveStat_Rice_baseline_fixedlong_small=subset(DescriptiveStat_Rice_baseline_fixedlong, 
+#                                                      select=c("CompMinPropSOSDBase","BaseMinPropSOSDComp", "Riskiness_Comp_-1",
+#                                                               "Riskiness_Comp_0","Riskiness_Comp_1"))
+# library(skimr)
+# datasummary_skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# library(modelsummary)
+# baseline_fixedlong_skim=skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Import price sensitive analysis ----------------------------------------------------------------
 

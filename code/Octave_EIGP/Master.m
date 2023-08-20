@@ -5,40 +5,40 @@ pkg load io
 % 1 Rice fixedlong versus fixed long ---------------------------------------------
 ndataseq01060216=xlsread('rice_baseline_fixedlong_IGP.xlsx')
 CreateWTPBoundsbyCell
-#CreateTableData
-
-
 xlswrite('RA_Rice_baseline_fixedlong.xlsx',RA)
 #xlswrite('RAwOutliers.xlsx',RAwOutliers)
 %xlswrite('CELL30MIDMAP.xlsx',CELL30MIDMAP)
-#xlswrite('DescriptiveStat_Rice_fixedlong_fixedlong.xlsx',DescriptiveStat)
 %xlswrite('PriceSensitivity.xlsx',PriceSensitivity)
 
 clear
-RA=xlsread('RA_Rice_baseline_fixedlong.xlsx')
+RA=xlsread('RA_Rice_baseline_fixedlong_NoNas.xlsx')
+CreateTableData
+xlswrite('DescriptiveStat_Rice_fixedlong_baseline_NoNas.xlsx',DescriptiveStat)
 CreateFigureData
-xlswrite('CELL30MIDMAP_Rice_fixedlong_fixedlong.xlsx',CELL30MIDMAP)
-xlswrite('PriceSensitivity_Rice_fixedlong_fixedlong.xlsx',PriceSensitivity)
+xlswrite('CELL30MIDMAP_Rice_fixedlong_fixedlong_NoNas.xlsx',CELL30MIDMAP)
+xlswrite('PriceSensitivity_Rice_fixedlong_fixedlongNoNas.xlsx',PriceSensitivity)
 
 
 % 2 Rice fixedlong versus fixed medium --------------------------------------------
 clear
 ndataseq01060216=xlsread('rice_fixedlong_fixedmedium_IGP.xlsx')
 CreateWTPBoundsbyCell
-CreateTableData
+
 
 %CreateFigureData
 xlswrite('RA_Rice_fixedlong_fixedmedium.xlsx',RA)
 #xlswrite('RAwOutliers.xlsx',RAwOutliers)
 %xlswrite('CELL30MIDMAP.xlsx',CELL30MIDMAP)
-xlswrite('DescriptiveStat_Rice_fixedlong_fixedmedium.xlsx',DescriptiveStat)
+
 %xlswrite('PriceSensitivity.xlsx',PriceSensitivity)
 
 clear
-RA=xlsread('RA_Rice_fixedlong_fixedmedium.xlsx')
+RA=xlsread('RA_Rice_fixedlong_fixedmedium_NoNas.xlsx')
+CreateTableData
+xlswrite('DescriptiveStat_Rice_fixedlong_fixedmedium_NoNas.xlsx',DescriptiveStat)
 CreateFigureData
-xlswrite('CELL30MIDMAP_Rice_fixedlong_fixedmedium.xlsx',CELL30MIDMAP)
-xlswrite('PriceSensitivity_Rice_fixedlong_fixedmedium.xlsx',PriceSensitivity)
+xlswrite('CELL30MIDMAP_Rice_fixedlong_fixedmedium_NoNas.xlsx',CELL30MIDMAP)
+xlswrite('PriceSensitivity_Rice_fixedlong_fixedmedium_NoNas.xlsx',PriceSensitivity)
 
 
 
@@ -46,21 +46,22 @@ xlswrite('PriceSensitivity_Rice_fixedlong_fixedmedium.xlsx',PriceSensitivity)
 clear
 ndataseq01060216=xlsread('rice_fixedlong_onset_long_IGP.xlsx')
 CreateWTPBoundsbyCell
-CreateTableData
 
 %CreateFigureData
 xlswrite('RA_Rice_fixedlong_onset_long.xlsx',RA)
 #xlswrite('RAwOutliers.xlsx',RAwOutliers)
 %xlswrite('CELL30MIDMAP.xlsx',CELL30MIDMAP)
-xlswrite('DescriptiveStat_Rice_fixedlong_onset_long.xlsx',DescriptiveStat)
+
 %xlswrite('PriceSensitivity.xlsx',PriceSensitivity)
 
 
 clear
-RA=xlsread('RA_Rice_fixedlong_onset_long.xlsx')
+RA=xlsread('RA_Rice_fixedlong_onset_long_NoNas.xlsx')
+CreateTableData
+xlswrite('DescriptiveStat_Rice_fixedlong_onset_long_IGP_NoNas.xlsx',DescriptiveStat)
 CreateFigureData
-xlswrite('CELL30MIDMAP_Rice_fixedlong_onset_long.xlsx',CELL30MIDMAP)
-xlswrite('PriceSensitivity_Rice_fixedlong_onset_long.xlsx',PriceSensitivity)
+xlswrite('CELL30MIDMAP_Rice_fixedlong_onset_long_NoNas.xlsx',CELL30MIDMAP)
+xlswrite('PriceSensitivity_Rice_fixedlong_onset_long_NoNas.xlsx',PriceSensitivity)
 
 
 
