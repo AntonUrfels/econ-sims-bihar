@@ -1,0 +1,495 @@
+
+# packages ------------------
+library(rio)
+library(dplyr)
+
+# Import RA --------------------------------------------------------------------
+
+## RICE -----------------------------------------------------
+RA_Rice_fixedlong_farmerpractice<- import("code/Octave_EIGP/RA_Rice_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
+
+RA_Rice_fixedlong_fixedmedium<- import("code/Octave_EIGP/RA_Rice_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Rice_fixedlong_onset_long<- import("code/Octave_EIGP/RA_Rice_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Rice_fixedlong_onset_medium<- import("code/Octave_EIGP/RA_Rice_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Rice_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/RA_Rice_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Rice_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/RA_Rice_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+
+
+
+# RA column names
+# %  1 = cellID
+# %  2 = Comparison Technology ID
+# %  3 = Base Technology ID
+# %  4 = Mean Yield for Comp
+# %  5 = Standard Deviation of Yield for Comp
+# %  6 = CV of Yield for Comp
+# %  7 = Maximum Yield for Comp
+# %  8 = Minimum Yield for Comp
+# %  9 = Probability of Crop Failure for Comp
+# % 10 = Min Proportion for Comp to SOSD Base
+# % 11 = Mean Yield for Base
+# % 12 = Standard Deviation of Yield for Base
+# % 13 = CV of Yield for Base
+# % 14 = Maximum Yield for Base
+# % 15 = Minimum Yield for Base
+# % 16 = Probability of Crop Failure for Base
+# % 17 = Min Proportion for Base to SOSD Comp
+# % 18 = Difference in mean Comp - Base
+# % 19 = Difference in standard deviation Comp - Base
+# % 20 = Difference in CV Comp - Base
+# % 21 = Difference in Prob of Crop Failure Comp - Base
+# % 22 = Min Proportion for Comp to SOSD Base divided by average base yield
+# % 23 = Min Proportion for Base to SOSD Comp divided by average base yield
+# % 24 = Comp More Risky (-1)/less Risky (1)/ Indeterminant (0) compared to Base
+# % 25 = Wheat Area
+
+columnnames=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+              "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+              "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+              "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+              "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+              "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_farmerpractice)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                          "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                          "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                          "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                          "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                          "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_fixedmedium)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                            "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                            "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                            "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                            "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                            "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_onset_long)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                           "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                           "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                           "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                           "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                           "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_onset_medium)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                             "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                             "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                             "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                             "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                             "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_onset_long_suppl)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                                 "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                                 "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                                 "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                                 "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                                 "Riskiness_Comp","RiceArea")
+
+names(RA_Rice_fixedlong_onset_medium_suppl)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                                   "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                                   "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                                   "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                                   "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                                   "Riskiness_Comp","RiceArea")
+
+library(dplyr)
+
+RA_Rice_fixedlong_farmerpractice=RA_Rice_fixedlong_farmerpractice %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Rice_fixedlong_fixedmedium=RA_Rice_fixedlong_fixedmedium %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Rice_fixedlong_onset_long=RA_Rice_fixedlong_onset_long %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Rice_fixedlong_onset_medium=RA_Rice_fixedlong_onset_medium %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Rice_fixedlong_onset_long_suppl=RA_Rice_fixedlong_onset_long_suppl %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Rice_fixedlong_onset_medium_suppl=RA_Rice_fixedlong_onset_medium_suppl %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+
+write.csv(RA_Rice_fixedlong_farmerpractice,"code/Octave_EIGP/RA_Rice_fixedlong_farmerpractice_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_fixedmedium,"code/Octave_EIGP/RA_Rice_fixedlong_fixedmedium_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_long,"code/Octave_EIGP/RA_Rice_fixedlong_onset_long_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_medium,"code/Octave_EIGP/RA_Rice_fixedlong_onset_medium_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_long_suppl,"code/Octave_EIGP/RA_Rice_fixedlong_onset_long_suppl_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_medium_suppl,"code/Octave_EIGP/RA_Rice_fixedlong_onset_medium_suppl_c_IGP.csv")
+
+write.csv(RA_Rice_fixedlong_farmerpractice,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_farmerpractice_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_fixedmedium,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_fixedmedium_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_long,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_long_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_medium,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_medium_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_long_suppl_c_IGP.csv")
+write.csv(RA_Rice_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_medium_suppl_c_IGP.csv")
+
+## WHEAT --------------------------------------------
+RA_Wheat_fixedlong_farmerpractice<- import("code/Octave_EIGP/RA_wheat_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Wheat_fixedlong_fixedmedium<- import("code/Octave_EIGP/RA_Wheat_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Wheat_fixedlong_onset_long<- import("code/Octave_EIGP/RA_Wheat_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Wheat_fixedlong_onset_medium<- import("code/Octave_EIGP/RA_Wheat_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Wheat_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/RA_Wheat_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+RA_Wheat_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/RA_Wheat_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+
+
+
+# RA column names
+# %  1 = cellID
+# %  2 = Comparison Technology ID
+# %  3 = Base Technology ID
+# %  4 = Mean Yield for Comp
+# %  5 = Standard Deviation of Yield for Comp
+# %  6 = CV of Yield for Comp
+# %  7 = Maximum Yield for Comp
+# %  8 = Minimum Yield for Comp
+# %  9 = Probability of Crop Failure for Comp
+# % 10 = Min Proportion for Comp to SOSD Base
+# % 11 = Mean Yield for Base
+# % 12 = Standard Deviation of Yield for Base
+# % 13 = CV of Yield for Base
+# % 14 = Maximum Yield for Base
+# % 15 = Minimum Yield for Base
+# % 16 = Probability of Crop Failure for Base
+# % 17 = Min Proportion for Base to SOSD Comp
+# % 18 = Difference in mean Comp - Base
+# % 19 = Difference in standard deviation Comp - Base
+# % 20 = Difference in CV Comp - Base
+# % 21 = Difference in Prob of Crop Failure Comp - Base
+# % 22 = Min Proportion for Comp to SOSD Base divided by average base yield
+# % 23 = Min Proportion for Base to SOSD Comp divided by average base yield
+# % 24 = Comp More Risky (-1)/less Risky (1)/ Indeterminant (0) compared to Base
+# % 25 = Wheat Area
+
+columnnames=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+              "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+              "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+              "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+              "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+              "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_farmerpractice)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                           "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                           "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                           "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                           "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                           "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_fixedmedium)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                             "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                             "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                             "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                             "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                             "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_onset_long)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                            "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                            "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                            "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                            "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                            "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_onset_medium)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                              "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                              "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                              "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                              "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                              "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_onset_long_suppl)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                                  "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                                  "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                                  "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                                  "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                                  "Riskiness_Comp","WheatArea")
+
+names(RA_Wheat_fixedlong_onset_medium_suppl)[1:25]=c("CellID","CompID","BaseID","CompYield_Mean","CompYield_SD",
+                                                    "CompYield_CV","CompYield_Max","CompYield_Min","CompCropFailureProb","CompMinPropSOSDBase",
+                                                    "BaseYield_Mean","BaseYield_SD","BaseYield_CV","BaseYield_Max","BaseYield_Min",
+                                                    "BaseCropFailureProb","BaseMinPropSOSDComp","Diff_Mean_CompBase","Diff_SD_CompBase","Diff_CV_CompBase",
+                                                    "Diff_CropFailureProbCompBase","MinProp_CompSOSDBase_Divdbaseyield","MinProp_BaseSOSDComp_Divdbaseyield",
+                                                    "Riskiness_Comp","WheatArea")
+
+library(dplyr)
+
+RA_Wheat_fixedlong_farmerpractice=RA_Wheat_fixedlong_farmerpractice %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Wheat_fixedlong_fixedmedium=RA_Wheat_fixedlong_fixedmedium %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Wheat_fixedlong_onset_long=RA_Wheat_fixedlong_onset_long %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Wheat_fixedlong_onset_medium=RA_Wheat_fixedlong_onset_medium %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Wheat_fixedlong_onset_long_suppl=RA_Wheat_fixedlong_onset_long_suppl %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+RA_Wheat_fixedlong_onset_medium_suppl=RA_Wheat_fixedlong_onset_medium_suppl %>% mutate_all(~ifelse(.x %in% c(-999999), NA, .x))
+
+
+write.csv(RA_Wheat_fixedlong_farmerpractice,"code/Octave_EIGP/RA_Wheat_fixedlong_farmerpractice_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_fixedmedium,"code/Octave_EIGP/RA_Wheat_fixedlong_fixedmedium_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_long,"code/Octave_EIGP/RA_Wheat_fixedlong_onset_long_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_medium,"code/Octave_EIGP/RA_Wheat_fixedlong_onset_medium_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_long_suppl,"code/Octave_EIGP/RA_Wheat_fixedlong_onset_long_suppl_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_medium_suppl,"code/Octave_EIGP/RA_Wheat_fixedlong_onset_medium_suppl_c_IGP.csv")
+
+write.csv(RA_Wheat_fixedlong_farmerpractice,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_farmerpractice_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_fixedmedium,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_fixedmedium_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_long,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_long_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_medium,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_medium_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_long_suppl,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_long_suppl_c_IGP.csv")
+write.csv(RA_Wheat_fixedlong_onset_medium_suppl,"data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_medium_suppl_c_IGP.csv")
+
+
+# Import Descriptive stats -------------------------------
+# %   1 = Weighted Mean   UB
+# %   2 = Weighted S.D.   UB
+# %   3 = Minimum         UB
+# %   4 = 10th Percentile UB
+# %   5 = 25th Percentile UB
+# %   6 = Median          UB
+# %   7 = 75th Percentile UB
+# %   8 = 90th Percentile UB
+# %   9 = Maximum         UB
+# %  10 = Weighted Mean   LB
+# %  11 = Weighted S.D.   LB
+# %  12 = Minimum         LB
+# %  13 = 10th Percentile LB
+# %  14 = 25th Percentile LB
+# %  15 = Median          LB
+# %  16 = 75th Percentile LB
+# %  17 = 90th Percentile LB
+# %  18 = Maximum         LB
+# %  19 = Proportion of Acres in Green
+# %  20 = Proportion of Acres in Yellow
+# %  21 = Proportion of Acres in Red
+# %  22 = Total Acres
+# %  23 = Number of Cells
+
+## Rice -------------------------------------------------
+Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Percentile25_UB","Median_UB","Percentile75_UB","Percentile90_UB","Max_UB",
+             "WeightedMean_LB","WeightedSD_LB","Min_LB","Percentile10_LB","Percentile25_LB","Median_LB","Percentile75_LB","Percentile90_LB","Max_LB",
+             "PropLandinGreen","PropLandinYellow","PropLandinRed","TotalAcres","NumberofCells")
+
+Statistics=as.data.frame(Statistics)
+
+DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_baseline_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_fixedmedium<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_fixedmedium_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_long_IGP_NoNas.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Rice_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/DescriptiveStat_Rice_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+
+
+DescriptiveStat_Rice_All_Scenarios=bind_cols(Statistics,DescriptiveStat_Rice_baseline_fixedlong,
+                                             DescriptiveStat_Rice_fixedlong_fixedmedium,
+                                             DescriptiveStat_Rice_fixedlong_onset_long,
+                                             DescriptiveStat_Rice_fixedlong_onset_long_suppl,
+                                             DescriptiveStat_Rice_fixedlong_onset_medium,
+                                             DescriptiveStat_Rice_fixedlong_onset_medium_suppl)
+
+names(DescriptiveStat_Rice_All_Scenarios)[1:7]=c("Statistics","Rice_farmerpractice","Rice_medium_long","Rice_onset_long",
+                                                 "Rice_onset_long_suppl","Rice_onset_medium","Rice_onset_medium_suppl")
+
+
+write.csv(DescriptiveStat_Rice_All_Scenarios,"code/Octave_EIGP/DescriptiveStat_Rice_All_Scenarios_FixedlongasBaseline_IGP.csv")
+
+## Wheat -------------------------
+Statistics=c("WeightedMean_UB","WeightedSD_UB","Min_UB","Percentile10_UB","Percentile25_UB","Median_UB","Percentile75_UB","Percentile90_UB","Max_UB",
+             "WeightedMean_LB","WeightedSD_LB","Min_LB","Percentile10_LB","Percentile25_LB","Median_LB","Percentile75_LB","Percentile90_LB","Max_LB",
+             "PropLandinGreen","PropLandinYellow","PropLandinRed","TotalAcres","NumberofCells")
+
+Statistics=as.data.frame(Statistics)
+
+DescriptiveStat_Wheat_baseline_fixedlong<- import("code/Octave_EIGP/DescriptiveStat_Wheat_baseline_fixedlong_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_fixedmedium<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_fixedmedium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_long<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_long_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_long_suppl<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_long_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_medium<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_medium_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+DescriptiveStat_Wheat_fixedlong_onset_medium_suppl<- import("code/Octave_EIGP/DescriptiveStat_Wheat_fixedlong_onset_medium_suppl_IGP.xlsx", sheet="Sheet1", col_names = FALSE)
+
+
+DescriptiveStat_Wheat_All_Scenarios=bind_cols(Statistics,DescriptiveStat_Wheat_baseline_fixedlong,
+                                              DescriptiveStat_Wheat_fixedlong_fixedmedium,
+                                              DescriptiveStat_Wheat_fixedlong_onset_long,
+                                              DescriptiveStat_Wheat_fixedlong_onset_long_suppl,
+                                              DescriptiveStat_Wheat_fixedlong_onset_medium,
+                                              DescriptiveStat_Wheat_fixedlong_onset_medium_suppl)
+
+names(DescriptiveStat_Wheat_All_Scenarios)[1:7]=c("Statistics","Wheat_farmerpractice","Wheat_medium_long","Wheat_onset_long",
+                                                  "Wheat_onset_long_suppl","Wheat_onset_medium","Wheat_onset_medium_suppl")
+
+
+write.csv(DescriptiveStat_Wheat_All_Scenarios,"code/Octave_EIGP/DescriptiveStat_Wheat_All_Scenarios_FixedlongasBaseline_IGP.csv")
+
+
+
+# Calculate descriptive statistics for Rice: OCTAVE CODE Produced wrong max ---------
+# Farmer practice
+# DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/RA_Rice_fixedlong_farmerpractice_c_IGP.csv")
+# DescriptiveStat_Rice_baseline_fixedlong$LowerBound=(DescriptiveStat_Rice_baseline_fixedlong$CompMinPropSOSDBase*-1)/1000
+# DescriptiveStat_Rice_baseline_fixedlong$UpperBound=(DescriptiveStat_Rice_baseline_fixedlong$BaseMinPropSOSDComp*-1)/1000
+# 
+# library(fastDummies)
+# DescriptiveStat_Rice_baseline_fixedlong <- fastDummies::dummy_cols(DescriptiveStat_Rice_baseline_fixedlong, select_columns = "Riskiness_Comp")
+# DescriptiveStat_Rice_baseline_fixedlong_small=subset(DescriptiveStat_Rice_baseline_fixedlong, 
+#                     select=c("LowerBound","UpperBound", "Riskiness_Comp_-1",
+#                     "Riskiness_Comp_0","Riskiness_Comp_1"))
+# library(modelsummary)
+# baseline_fixedlong_skim=skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# 
+# 
+# lb=quantile(DescriptiveStat_Rice_baseline_fixedlong_small$LowerBound, probs = seq(.1, .9, by = .1))
+# ub=quantile(DescriptiveStat_Rice_baseline_fixedlong_small$UpperBound, probs = seq(.1, .9, by = .1))
+# 
+# 
+# # Fixed medium
+# DescriptiveStat_Rice_baseline_fixedlong<- import("code/Octave_EIGP/RA_Rice_fixedlong_fixedmedium_c_IGP.csv")
+# library(fastDummies)
+# DescriptiveStat_Rice_baseline_fixedlong <- fastDummies::dummy_cols(DescriptiveStat_Rice_baseline_fixedlong, select_columns = "Riskiness_Comp")
+# DescriptiveStat_Rice_baseline_fixedlong_small=subset(DescriptiveStat_Rice_baseline_fixedlong, 
+#                                                      select=c("CompMinPropSOSDBase","BaseMinPropSOSDComp", "Riskiness_Comp_-1",
+#                                                               "Riskiness_Comp_0","Riskiness_Comp_1"))
+# library(skimr)
+# datasummary_skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# library(modelsummary)
+# baseline_fixedlong_skim=skim(DescriptiveStat_Rice_baseline_fixedlong_small)
+# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Import price sensitive analysis ----------------------------------------------------------------
+
+## Rice ------------------------------------------------------------------------------------------
+PriceSensitivity_Rice_baseline_fixedlong=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_baseline_fixedlong)[1:3]=c("Rice_baseline_fixedlong_cost_share","Rice_baseline_fixedlong_share_in_green","Rice_baseline_fixedlong_share_in_red")
+
+PriceSensitivity_Rice_fixedlong_fixedmedium=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_fixedlong_fixedmedium)[1:3]=c("Rice_fixedlong_fixedmedium_cost_share","Rice_fixedlong_fixedmedium_share_in_green","Rice_fixedlong_fixedmedium_share_in_red")
+
+PriceSensitivity_Rice_fixedlong_onset_long=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_fixedlong_onset_long)[1:3]=c("Rice_fixedlong_onset_long_cost_share","Rice_fixedlong_onset_long_share_in_green","Rice_baseline_fixedlong_share_in_red")
+
+PriceSensitivity_Rice_fixedlong_onset_long_suppl=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_fixedlong_onset_long_suppl)[1:3]=c("Rice_fixedlong_onset_long_suppl_cost_share","Rice_fixedlong_onset_long_suppl_share_in_green","Rice_fixedlong_onset_long_suppl_share_in_red")
+
+PriceSensitivity_Rice_fixedlong_onset_medium=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_fixedlong_onset_medium)[1:3]=c("Rice_fixedlong_onset_medium_cost_share","Rice_fixedlong_onset_medium_share_in_green","Rice_fixedlong_onset_medium_share_in_red")
+
+PriceSensitivity_Rice_fixedlong_onset_medium_suppl=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_Rice_fixedlong_onset_medium_suppl)[1:3]=c("Rice_fixedlong_onset_medium_suppl_cost_share","Rice_fixedlong_onset_medium_suppl_share_in_green","Rice_fixedlong_onset_medium_suppl_share_in_red")
+
+
+PriceSensitivity_Rice_ALL=bind_cols(PriceSensitivity_Rice_baseline_fixedlong,PriceSensitivity_Rice_fixedlong_fixedmedium,
+                                    PriceSensitivity_Rice_fixedlong_onset_long,PriceSensitivity_Rice_fixedlong_onset_long_suppl,
+                                    PriceSensitivity_Rice_fixedlong_onset_medium,PriceSensitivity_Rice_fixedlong_onset_medium_suppl)
+
+PriceSensitivity_Rice_ALL_green=subset(PriceSensitivity_Rice_ALL,select=c("Rice_baseline_fixedlong_cost_share","Rice_baseline_fixedlong_share_in_green",
+                                                                          "Rice_fixedlong_fixedmedium_share_in_green","Rice_fixedlong_onset_long_share_in_green",
+                                                                          "Rice_fixedlong_onset_long_suppl_share_in_green","Rice_fixedlong_onset_medium_share_in_green",
+                                                                          "Rice_fixedlong_onset_medium_suppl_share_in_green"))
+library(data.table)
+PriceSensitivity_Rice_ALL_green_long <- melt(setDT(PriceSensitivity_Rice_ALL_green), id.vars = c("Rice_baseline_fixedlong_cost_share"),value.name=c("share_in_green") ,variable.name = "Clearly_better")
+
+names(PriceSensitivity_Rice_ALL_green_long)[1]="Price_sensitivity"
+
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_baseline_fixedlong_share_in_green"]="Farmer practice"
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_fixedlong_fixedmedium_share_in_green"]="Rice fixed medium"
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_fixedlong_onset_long_share_in_green"]="Rice onset long"
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_fixedlong_onset_long_suppl_share_in_green"]="Rice onset long suppl"
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_fixedlong_onset_medium_share_in_green"]="Rice onset medium"
+PriceSensitivity_Rice_ALL_green_long$Scenario[PriceSensitivity_Rice_ALL_green_long$Clearly_better=="Rice_fixedlong_onset_medium_suppl_share_in_green"]="Rice onset medium suppl"
+
+
+
+
+
+
+library(ggplot2)
+PriceSensitivity_Rice_ALL_greenplot<-ggplot(PriceSensitivity_Rice_ALL_green_long, aes(x=Price_sensitivity, y=share_in_green, color=Scenario)) +
+  geom_line(size=1.1)+
+  #scale_size_manual(values = c(4,2,2,2,2,2) ) +
+  scale_color_manual( values = c("steelblue", "darkgreen", "darkred", "orange","black","grey"))+
+  scale_x_continuous(limits=c(-1,21),expand=c(0,0),breaks=seq(0,21,4))+
+  scale_y_continuous(limits=c(0,1),expand=c(0,0),breaks=seq(0,1,0.1))+
+  theme(axis.text.x = element_text(size=12,color="black"))+
+  labs(y="Technology clearly beneficial \n (share of farms)",x="x input-output price ratio(Rs.10)")
+previous_theme <- theme_set(theme_bw())
+PriceSensitivity_Rice_ALL_greenplot
+
+ggsave("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_Rice_ALL_greenplot_FixedlongasBaseline.png",dpi=300)
+
+
+
+
+
+
+
+## Wheat -----------------------------------------------------------------------------------------
+PriceSensitivity_wheat_baseline_fixedlong=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_baseline_fixedlong.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_baseline_fixedlong)[1:3]=c("wheat_baseline_fixedlong_cost_share","wheat_baseline_fixedlong_share_in_green","wheat_baseline_fixedlong_share_in_red")
+
+PriceSensitivity_wheat_fixedlong_fixedmedium=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_fixedlong_fixedmedium.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_fixedlong_fixedmedium)[1:3]=c("wheat_fixedlong_fixedmedium_cost_share","wheat_fixedlong_fixedmedium_share_in_green","wheat_fixedlong_fixedmedium_share_in_red")
+
+PriceSensitivity_wheat_fixedlong_onset_long=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_fixedlong_onset_long.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_fixedlong_onset_long)[1:3]=c("wheat_fixedlong_onset_long_cost_share","wheat_fixedlong_onset_long_share_in_green","wheat_fixedlong_onset_long_share_in_red")
+
+PriceSensitivity_wheat_fixedlong_onset_long_suppl=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_fixedlong_onset_long_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_fixedlong_onset_long_suppl)[1:3]=c("wheat_fixedlong_onset_long_suppl_cost_share","wheat_fixedlong_onset_long_suppl_share_in_green","wheat_fixedlong_onset_long_suppl_share_in_red")
+
+PriceSensitivity_wheat_fixedlong_onset_medium=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_fixedlong_onset_medium.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_fixedlong_onset_medium)[1:3]=c("wheat_fixedlong_onset_medium_cost_share","wheat_fixedlong_onset_medium_share_in_green","wheat_fixedlong_onset_medium_share_in_red")
+
+PriceSensitivity_wheat_fixedlong_onset_medium_suppl=import("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_fixedlong_onset_medium_suppl.xlsx", sheet="Sheet1", col_names = FALSE)
+names(PriceSensitivity_wheat_fixedlong_onset_medium_suppl)[1:3]=c("wheat_fixedlong_onset_medium_suppl_cost_share","wheat_fixedlong_onset_medium_suppl_share_in_green","wheat_fixedlong_onset_medium_suppl_share_in_red")
+
+PriceSensitivity_wheat_ALL=bind_cols(PriceSensitivity_wheat_baseline_fixedlong,PriceSensitivity_wheat_fixedlong_fixedmedium,
+                                     PriceSensitivity_wheat_fixedlong_onset_long,PriceSensitivity_wheat_fixedlong_onset_long_suppl,
+                                     PriceSensitivity_wheat_fixedlong_onset_medium,PriceSensitivity_wheat_fixedlong_onset_medium_suppl)
+
+PriceSensitivity_wheat_ALL_green=subset(PriceSensitivity_wheat_ALL,select=c("wheat_baseline_fixedlong_cost_share","wheat_baseline_fixedlong_share_in_green",
+                                                                            "wheat_fixedlong_fixedmedium_share_in_green","wheat_fixedlong_onset_long_share_in_green",
+                                                                            "wheat_fixedlong_onset_long_suppl_share_in_green","wheat_fixedlong_onset_medium_share_in_green",
+                                                                            "wheat_fixedlong_onset_medium_suppl_share_in_green"))
+library(data.table)
+PriceSensitivity_wheat_ALL_green_long <- melt(setDT(PriceSensitivity_wheat_ALL_green), id.vars = c("wheat_baseline_fixedlong_cost_share"),value.name=c("share_in_green") ,variable.name = "Clearly_better")
+
+names(PriceSensitivity_wheat_ALL_green_long)[1]="Price_sensitivity"
+
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_baseline_fixedlong_share_in_green"]="Farmer practice"
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_fixedlong_fixedmedium_share_in_green"]="Wheat fixed medium"
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_fixedlong_onset_long_share_in_green"]="Wheat onset long"
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_fixedlong_onset_long_suppl_share_in_green"]="Wheat onset long suppl"
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_fixedlong_onset_medium_share_in_green"]="Wheat onset medium"
+PriceSensitivity_wheat_ALL_green_long$Scenario[PriceSensitivity_wheat_ALL_green_long$Clearly_better=="wheat_fixedlong_onset_medium_suppl_share_in_green"]="Wheat onset medium suppl"
+
+
+library(ggplot2)
+PriceSensitivity_wheat_ALL_greenplot<-ggplot(PriceSensitivity_wheat_ALL_green_long, aes(x=Price_sensitivity, y=share_in_green, color=Scenario)) +
+  geom_line(size=1.1)+
+  #scale_size_manual(values = c(4,2,2,2,2,2) ) +
+  scale_color_manual( values = c("steelblue", "darkgreen", "darkred", "orange","black","grey"))+
+  scale_x_continuous(limits=c(-1,21),expand=c(0,0),breaks=seq(0,21,4))+
+  scale_y_continuous(limits=c(0,1),expand=c(0,0),breaks=seq(0,1,0.1))+
+  theme(axis.text.x = element_text(size=12,color="black"))+
+  labs(y="Technology clearly beneficial \n (share of farms)",x="x input-output price ratio(Rs.10)")
+previous_theme <- theme_set(theme_bw())
+PriceSensitivity_wheat_ALL_greenplot
+
+ggsave("D:/OneDrive/CIMMYT/Papers/AntonCropSim/code/pairwisefixedlongasbaseline/PriceSensitivity_wheat_ALL_greenplot_FixedlongasBaseline.png",dpi=300)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
