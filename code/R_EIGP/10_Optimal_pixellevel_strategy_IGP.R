@@ -191,6 +191,7 @@ files <- c(file1)
 r <- load_sims(files,"rice_yield",aoi,NA)
 r1 <- r[[1]][[1]]
 
+# Optimal rice planting strategy: partial profits
 m <- WTP_Bounds
 
 v <- as.vector(getValues(r1))
@@ -238,6 +239,6 @@ optimal_strategies_plot
 
 ggsave("output/figures_IGP_IGP/optimal_strategies_IGP.png",dpi=300,width=6.88, height=4.16)
 
-
+write.csv(WTP_Bounds,"output/tables/Optimal_pixellevel_strategy_WTP_Bounds.csv")
 
 
