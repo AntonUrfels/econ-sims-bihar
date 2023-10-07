@@ -250,7 +250,7 @@ optimal_strategies[optimal_strategies==5] <- 4
 optimal_strategies[optimal_strategies==7] <- 5
 optimal_strategies[optimal_strategies==9] <- 7
 optimal_strategies[optimal_strategies==11] <- 6
-optimal_strategies[optimal_strategies==13] <- 6
+optimal_strategies[optimal_strategies==13] <- 8
 
 cols <- c("1" = "#ccebc5", 
           "2" = "#fbb4ae",
@@ -258,21 +258,23 @@ cols <- c("1" = "#ccebc5",
           "4" ="#decbe4" ,
           "5" = "#b3cde3",
           "6"="#fed9a6",
-          "7"="#ffffcc")
+          "7"="#ffffcc",
+          "8"="#e5d8bd")
 
 
 library(ggpubr)
 optimal_strategies_plot=gplot(optimal_strategies) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = cols,na.value = "transparent",
-                    breaks = c("2","4","1","3","5","6","7"),
+                    breaks = c("2","4","1","3","5","6","7","8"),
                     labels=c(                                       "No clear strategy",
                                                                     "Farmer practice",
                                                                     "Fixed long",
                                                                     "Fixed medium",
                                                                     "Onset long",
                                                                     "Onset medium",
-                                                                    "Onset long supp"))+
+                                                                    "Onset long supp",
+                                                                    "Onset medium supp"))+
   labs(x="Longitude",y="Latitude",title="Optimal_strategies",fill="Willingness to pay")+
   theme_classic2()
 #previous_theme <- theme_set(theme_bw())
