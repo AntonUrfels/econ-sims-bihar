@@ -227,13 +227,43 @@ cols <- c("1" = "red", "2" = "yellow","3" = "orange","4" = "green","5"="blue" ,
           "6"="grey", "8" = "salmon","7"="black","9"="purple",
           "10"="pink","11"="cyan", "12"="darkgreen","13"="brown")
 
+cols <- c("1" = "#ccebc5", "2" = "#b3cde3","3" = "brown","4" = "#b3cde3","5"="#decbe4" ,
+          "6"="#b3cde3", "7" = "#fbb4ae","8"="#b3cde3","9"="#fbb4ae",
+          "10"="#b3cde3","11"="#fed9a6", "12"="#b3cde3","13"="#fed9a6")
+
+
+optimal_strategies[optimal_strategies==4] <- 2
+optimal_strategies[optimal_strategies==6] <- 2
+optimal_strategies[optimal_strategies==8] <- 2
+optimal_strategies[optimal_strategies==10] <- 2
+optimal_strategies[optimal_strategies==12] <- 2
+optimal_strategies[optimal_strategies==5] <- 4
+optimal_strategies[optimal_strategies==7] <- 5
+optimal_strategies[optimal_strategies==9] <- 5
+optimal_strategies[optimal_strategies==11] <- 6
+optimal_strategies[optimal_strategies==13] <- 6
+
+cols <- c("1" = "#ccebc5", 
+          "2" = "#fbb4ae",
+          "3" = "brown",
+          "4" ="#decbe4" ,
+          "5" = "#b3cde3",
+          "6"="#fed9a6")
+
+
+library(ggpubr)
 optimal_strategies_plot=gplot(optimal_strategies) +
   geom_raster(aes(fill = factor(value)))+
-  scale_fill_manual(values = cols,na.value = "transparent",labels=c("Fixed long clearly","Fixed medium not clear","Fixed medium clearly",
-                                                                      "Farmer practice not clear","Farmer practice clearly","Onset long not clear",
-                                                                      "Onset long clearly","Onset long supp not clear","Onset long supp clearly",
-                                                                      "Onset medium not clear","Onset medium clearly","Onsed medium supp not clear","Onset medium supp clearly",""))+
-  labs(x="Longitude",y="Latitude",title="Optimal_strategies",fill="Willingness to pay")
+  scale_fill_manual(values = cols,na.value = "transparent",
+                    breaks = c("2","4","1","3","5","6"),
+                    labels=c(                                       "No clear strategy",
+                                                                    "Farmer practice",
+                                                                    "Fixed long",
+                                                                    "Fixed medium",
+                                                                    "Onset long",
+                                                                    "Onset medium"))+
+  labs(x="Longitude",y="Latitude",title="Optimal_strategies",fill="Willingness to pay")+
+  theme_classic2()
 #previous_theme <- theme_set(theme_bw())
 optimal_strategies_plot
 
