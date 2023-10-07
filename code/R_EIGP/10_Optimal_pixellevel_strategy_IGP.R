@@ -209,10 +209,19 @@ rat$optimal_choices <- c("FL","FM_No","FM_Yes",
                          "OL_Yes","OLS_No","OLS_Yes",
                          "OM_No","OM_Yes","OMS_No","OMS_Yes")
 
-rat$optimal_choices_detailed <- c("Fixed long clearly","Fixed medium not clear","Fixed medium clearly",
-                         "Farmer practice not clear","Farmer practice clearly","Onset long not clear",
-                         "Onset long clearly","Onset long supp not clear","Onset long supp clearly",
-                         "Onset medium not clear","Onset medium clearly","Onsed medium supp not clear","Onset medium supp clearly")
+rat$optimal_choices_detailed <- c("Fixed long clearly",
+                                  "Fixed medium not clear",
+                                  "Fixed medium clearly",
+                         "Farmer practice not clear",
+                         "Farmer practice clearly",
+                         "Onset long not clear",
+                         "Onset long clearly",
+                         "Onset long supp not clear",
+                         "Onset long supp clearly",
+                         "Onset medium not clear",
+                         "Onset medium clearly",
+                         "Onsed medium supp not clear",
+                         "Onset medium supp clearly")
 
 levels(optimal_strategies) <- rat
 
@@ -239,7 +248,7 @@ optimal_strategies[optimal_strategies==10] <- 2
 optimal_strategies[optimal_strategies==12] <- 2
 optimal_strategies[optimal_strategies==5] <- 4
 optimal_strategies[optimal_strategies==7] <- 5
-optimal_strategies[optimal_strategies==9] <- 5
+optimal_strategies[optimal_strategies==9] <- 7
 optimal_strategies[optimal_strategies==11] <- 6
 optimal_strategies[optimal_strategies==13] <- 6
 
@@ -248,20 +257,22 @@ cols <- c("1" = "#ccebc5",
           "3" = "brown",
           "4" ="#decbe4" ,
           "5" = "#b3cde3",
-          "6"="#fed9a6")
+          "6"="#fed9a6",
+          "7"="#ffffcc")
 
 
 library(ggpubr)
 optimal_strategies_plot=gplot(optimal_strategies) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = cols,na.value = "transparent",
-                    breaks = c("2","4","1","3","5","6"),
+                    breaks = c("2","4","1","3","5","6","7"),
                     labels=c(                                       "No clear strategy",
                                                                     "Farmer practice",
                                                                     "Fixed long",
                                                                     "Fixed medium",
                                                                     "Onset long",
-                                                                    "Onset medium"))+
+                                                                    "Onset medium",
+                                                                    "Onset long supp"))+
   labs(x="Longitude",y="Latitude",title="Optimal_strategies",fill="Willingness to pay")+
   theme_classic2()
 #previous_theme <- theme_set(theme_bw())
