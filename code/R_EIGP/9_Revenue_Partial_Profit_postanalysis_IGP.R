@@ -347,7 +347,14 @@ png("output/figures_IGP/UpperWTP_riceonsetlong_prof_IGP.png")
 UpperWTP_riceonsetlong_prof
 dev.off()
 
+UpperWTP_riceonsetlong_prof_usd=levelplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_Up/80,par.settings=RdBuTheme(),
+                                      margin=F, contour = TRUE, main="Upper WTP (US$/ha) bound for rice onset long")
 
+UpperWTP_riceonsetlong_prof_usd
+
+png("output/figures_IGP/UpperWTP_riceonsetlong_prof_IGP_usd.png")
+UpperWTP_riceonsetlong_prof_usd
+dev.off()
 
 # Lower bound ---------
 r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low<- r1
@@ -362,6 +369,12 @@ LowerWTP_riceonsetlong_prof
 dev.off()
 
 
+LowerWTP_riceonsetlong_prof_usd=levelplot(r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low/80,par.settings=RdBuTheme(),
+                                      margin=F, contour = TRUE, main="Lower WTP (US$/ha) bound for rice onset long")
+LowerWTP_riceonsetlong_prof_usd
+png("output/figures_IGP/LowerWTP_riceonsetlong_prof_IGP_usd.png")
+LowerWTP_riceonsetlong_prof_usd
+dev.off()
 
 
 
