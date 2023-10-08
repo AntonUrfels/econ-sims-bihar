@@ -28,7 +28,7 @@ stochasticdominance=ggplot(df, aes(x, ecdf, colour =   Scenarios,linetype=Scenar
 previous_theme <- theme_set(theme_bw())
 stochasticdominance
 
-ggsave("Figure_stochasticdominance_truncated_normal.png",dpi=300)
+ggsave("code/Hypothetical/Figure_stochasticdominance_truncated_normal.png",dpi=300)
 
 # Data for stochastic dominance comparisons ------------------------------------
 ID=rep(1,1000)
@@ -40,27 +40,27 @@ Area=rep(1,1000)
 
 
 QvsG=data.frame(ID,Rep,Area,q,g)
-export(QvsG,colNames=F,"Hypothetical/QvsG.xlsx")
+export(QvsG,colNames=F,"code/Hypothetical/QvsG.xlsx")
 
 QvsF=data.frame(ID,Rep,Area,q,f)
-export(QvsF,colNames=F,"Hypothetical/QvsF.xlsx")
+export(QvsF,colNames=F,"code/Hypothetical/QvsF.xlsx")
 
 FvsG=data.frame(ID,Rep,Area,f,g)
-export(FvsG,colNames=F,"Hypothetical/FvsG.xlsx")
+export(FvsG,colNames=F,"code/Hypothetical/FvsG.xlsx")
 
 # Experiments -------------
 
 # G vs Q: Q as baseline -----------------
 GvsQ=data.frame(ID,Rep,Area,g,q)
-export(GvsQ,colNames=F,"Hypothetical/GvsQ.xlsx")
+export(GvsQ,colNames=F,"code/Hypothetical/GvsQ.xlsx")
 
 
 ## F vs Q: Q as baseline ---------------
 FvsQ=data.frame(ID,Rep,Area,f,q)
-export(FvsQ,colNames=F,"Hypothetical/FvsQ.xlsx")
+export(FvsQ,colNames=F,"code/Hypothetical/FvsQ.xlsx")
 
 ## G vs F: F as baseline ----------------
 GvsF=data.frame(ID,Rep,Area,g,f)
-export(GvsF,colNames=F,"Hypothetical/GvsF.xlsx")
+export(GvsF,colNames=F,"code/Hypothetical/GvsF.xlsx")
 
 
