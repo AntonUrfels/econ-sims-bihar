@@ -347,6 +347,8 @@ png("output/figures_IGP/UpperWTP_riceonsetlong_prof_IGP.png")
 UpperWTP_riceonsetlong_prof
 dev.off()
 
+
+
 # Lower bound ---------
 r1_RA_rice_wheat_pprof_onset_long_fixedlong_c_WTP_low<- r1
 
