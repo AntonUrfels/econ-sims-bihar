@@ -275,7 +275,7 @@ optimal_strategies_plot=gplot(optimal_strategies) +
                                                                     "Onset medium",
                                                                     "Onset long supp",
                                                                     "Onset medium supp"))+
-  labs(x="Longitude",y="Latitude",title="Optimal_strategies",fill="Willingness to pay")+
+  labs(x="Longitude",y="Latitude",fill="")+
   theme_classic2()
 #previous_theme <- theme_set(theme_bw())
 optimal_strategies_plot
