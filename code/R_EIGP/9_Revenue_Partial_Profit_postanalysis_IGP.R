@@ -115,7 +115,7 @@ levelplot(r1_RA_rice_wheat_rev_farmer_practice_fixedlong_c,par.settings=RdBuThem
 rice_wheat_farmer_practice_rev=gplot(r1_RA_rice_wheat_rev_farmer_practice_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-Wheat: Farmer practice",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-Wheat:S0-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_farmer_practice_rev
 
@@ -138,7 +138,7 @@ levelplot(r1_RA_rice_wheat_rev_fixed_medium_fixedlong_c,par.settings=RdBuTheme()
 rice_wheat_fixed_medium_rev=gplot(r1_RA_rice_wheat_rev_fixed_medium_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-wheat: Fixed medium",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-wheat: S2-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_fixed_medium_rev
 
@@ -161,7 +161,7 @@ levelplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c,par.settings=RdBuTheme(),m
 rice_wheat_onset_long_rev=gplot(r1_RA_rice_wheat_rev_onset_long_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-wheat:Onset long",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-wheat:S3-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_onset_long_rev
 
@@ -211,7 +211,7 @@ levelplot(r1_RA_rice_wheat_rev_onset_medium_fixedlong_c,par.settings=RdBuTheme()
 rice_wheat_onset_medium_rev=gplot(r1_RA_rice_wheat_rev_onset_medium_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-wheat: Onset medium",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-wheat: S5-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_onset_medium_rev
 
@@ -234,7 +234,7 @@ levelplot(r1_RA_rice_wheat_rev_onset_long_suppl_fixedlong_c,par.settings=RdBuThe
 rice_wheat_onset_long_suppl_rev=gplot(r1_RA_rice_wheat_rev_onset_long_suppl_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-wheat: Onset long supplemental irrigation",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-wheat: S4-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_onset_long_suppl_rev
 
@@ -257,11 +257,17 @@ levelplot(r1_RA_rice_wheat_rev_onset_medium_supp_fixedlong_c,par.settings=RdBuTh
 rice_wheat_onset_medium_supp_rev=gplot(r1_RA_rice_wheat_rev_onset_medium_supp_fixedlong_c) +
   geom_raster(aes(fill = factor(value)))+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice-Wheat: Onset medium supplemental irrigation",fill="Willingness to pay")
+  labs(x="Longitude",y="Latitude",title="Rice-Wheat: S6-S1",fill="Willingness to pay")
 previous_theme <- theme_set(theme_bw())
 rice_wheat_onset_medium_supp_rev
 
 ggsave("output/figures_IGP_IGP/rice_wheat_onset_medium_supp_rev_IGP.png",dpi=300,width=6.88, height=4.16)
+
+
+
+
+
+
 
 
 
