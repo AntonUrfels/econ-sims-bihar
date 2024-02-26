@@ -173,13 +173,13 @@ levelplot(r1_RA_Rice_baseline_fixedlong_c,par.settings=RdBuTheme(),margin=F, mai
 
 
 rice_farmer_practice=gplot(r1_RA_Rice_baseline_fixedlong_c) +
-  geom_raster(aes(fill = factor(value)))+
+  geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice: Farmer practice",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice: S0-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_farmer_practice
 
-ggsave("output/figures_IGP/rice_farmer_practice_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_farmer_practice_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -199,13 +199,13 @@ levelplot(r1_Rice_fixedlong_fixedmedium,par.settings=RdBuTheme(),margin=F, main=
 
 
 rice_fixedmedium=gplot(r1_Rice_fixedlong_fixedmedium) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice:Fixed, medium duration variety",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice:S2-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_fixedmedium
 
-ggsave("output/figures_IGP/rice_fixedmedium_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_fixedmedium_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 # Fixed long versus onset long supp
@@ -220,13 +220,13 @@ library(rasterVis)
 levelplot(r1_Rice_fixedlong_onset_long,par.settings=RdBuTheme(),margin=F, main="Rice:Onset long more beneficial than fixed long strategy")
 
 rice_onset_long=gplot(r1_Rice_fixedlong_onset_long) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice:Onset, long duration variety",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice:S3-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_onset_long
 
-ggsave("output/figures_IGP/rice_onset_long_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_onset_long_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -244,13 +244,13 @@ library(rasterVis)
 levelplot(r1_Rice_fixedlong_onset_long_suppl,par.settings=RdBuTheme(),margin=F, main="Rice:Onset, long duration variety, supplemental irrigation")
 
 rice_onset_long_supp=gplot(r1_Rice_fixedlong_onset_long_suppl) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice:Onset, long duration variety, supplemental irrigation",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice:S4-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_onset_long_supp
 
-ggsave("output/figures_IGP/rice_onset_long_supp_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_onset_long_supp_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -267,14 +267,14 @@ library(rasterVis)
 levelplot(r1_Rice_fixedlong_onset_medium,par.settings=RdBuTheme(),margin=F, main="Rice:Onset medium more beneficial than fixed long strategy")
 
 rice_onset_medium=gplot(r1_Rice_fixedlong_onset_medium) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice:Onset, medium duration variety",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice:S5-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_onset_medium
 ##619CFF
 
-ggsave("output/figures_IGP/rice_onset_medium_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_onset_medium_IGP.png",dpi=300,width=3.88, height=3.16)
 
 # Fixed long versus onset medium supp
 m <- read.csv("data/maxwell_output_fixedLong_IGP/RA_Rice_fixedlong_onset_medium_suppl_c_IGP.csv")
@@ -288,14 +288,14 @@ library(rasterVis)
 levelplot(r1_Rice_fixedlong_onset_medium_suppl,par.settings=RdBuTheme(),margin=F, main="Rice:Onset medium supp more beneficial than fixed long strategy")
 
 rice_onset_medium_supp=gplot(r1_Rice_fixedlong_onset_medium_suppl) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Rice:Onset, medium duration variety, supplemental irrigation",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Rice:S6-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 rice_onset_medium_supp
 
 
-ggsave("output/figures_IGP/rice_onset_medium_supp_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/rice_onset_medium_supp_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -318,13 +318,13 @@ levelplot(r1_Wheat_fixedlong_farmer_practice,par.settings=RdBuTheme(),margin=F, 
 
 
 Wheat_farmer_practice=gplot(r1_Wheat_fixedlong_farmer_practice) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat: Farmer practice",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S0-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_farmer_practice
 
-ggsave("output/figures_IGP/Wheat_farmer_practice_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_farmer_practice_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -344,13 +344,13 @@ levelplot(r1_Wheat_fixedlong_fixedmedium,par.settings=RdBuTheme(),margin=F, main
 
 
 Wheat_fixedmedium=gplot(r1_Wheat_fixedlong_fixedmedium) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat: Fixed, medium duration variety rice planting strategy",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S2-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_fixedmedium
 
-ggsave("output/figures_IGP/Wheat_fixedmedium_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_fixedmedium_IGP.png",dpi=300,width=3.88, height=3.16)
 
 # Fixed long versus onset 
 m <- read.csv("data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_long_c_IGP.csv")
@@ -364,13 +364,13 @@ library(rasterVis)
 levelplot(r1_Wheat_fixedlong_onset_long,par.settings=RdBuTheme(),margin=F, main="Wheat:Onset long more beneficial than fixed long strategy")
 
 Wheat_onset_long=gplot(r1_Wheat_fixedlong_onset_long) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat:Onset, long duration variety rice planting strategy",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S3-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_onset_long
 
-ggsave("output/figures_IGP/Wheat_onset_long_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_onset_long_IGP.png",dpi=300,width=3.88, height=3.16)
 
 # Fixed long versus onset long suppl
 m <- read.csv("data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_long_suppl_c_IGP.csv")
@@ -384,13 +384,13 @@ library(rasterVis)
 levelplot(r1_Wheat_fixedlong_onset_long_suppl,par.settings=RdBuTheme(),margin=F, main="Wheat:Onset, long duration variety, supplemental irrigation")
 
 Wheat_onset_long_supp=gplot(r1_Wheat_fixedlong_onset_long_suppl) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat:Onset, long duration variety, supplemental irrigation rice planting",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S4-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_onset_long_supp
 
-ggsave("output/figures_IGP/Wheat_onset_long_supp_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_onset_long_supp_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 # Fixed long versus onset medium 
@@ -405,13 +405,13 @@ library(rasterVis)
 levelplot(r1_Wheat_fixedlong_onset_medium,par.settings=RdBuTheme(),margin=F, main="Wheat:Onset medium more beneficial than fixed long strategy")
 
 Wheat_onset_medium=gplot(r1_Wheat_fixedlong_onset_medium) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat:Onset, medium duration variety rice planting strategy",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S5-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_onset_medium
 
-ggsave("output/figures_IGP/Wheat_onset_medium_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_onset_medium_IGP.png",dpi=300,width=3.88, height=3.16)
 
 # Fixed long versus onset medium supp
 m <- read.csv("data/maxwell_output_fixedLong_IGP/RA_Wheat_fixedlong_onset_medium_suppl_c_IGP.csv")
@@ -425,14 +425,14 @@ library(rasterVis)
 levelplot(r1_Wheat_fixedlong_onset_medium_suppl,par.settings=RdBuTheme(),margin=F, main="Wheat:Onset medium supp more beneficial than fixed long strategy")
 
 Wheat_onset_medium_supp=gplot(r1_Wheat_fixedlong_onset_medium_suppl) +
-  geom_raster(aes(fill = factor(value)))+
+ geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
   scale_fill_manual(values = c("#F8766D","#619CFF", "#00BA38"),na.value = "transparent",labels=c("Clearly worse","Better or worse","Clearly better",""))+
-  labs(x="Longitude",y="Latitude",title="Wheat:Onset, medium duration variety, supplemental irrigation rice planting",fill="Willingness to pay")
-previous_theme <- theme_set(theme_bw())
+  labs(x="Longitude",y="Latitude",title="Wheat:S6-S1",fill="Willingness to pay")
+previous_theme <- theme_set(theme_bw(base_size = 16))
 Wheat_onset_medium_supp
 
 
-ggsave("output/figures_IGP/Wheat_onset_medium_supp_IGP.png",dpi=300,width=6.88, height=4.16)
+ggsave("output/figures_IGP/Wheat_onset_medium_supp_IGP.png",dpi=300,width=3.88, height=3.16)
 
 
 
@@ -487,13 +487,13 @@ ggsave("output/figures_IGP/Wheat_onset_medium_supp_IGP.png",dpi=300,width=6.88, 
 # levelplot(r1_System_fixedlong_fixedmedium,par.settings=RdBuTheme(),margin=F, main="System:Fixed medium more beneficial than fixed long strategy")
 # 
 # System_fixedmedium=gplot(r1_System_fixedlong_fixedmedium) +
-#   geom_raster(aes(fill = factor(value)))+
+#  geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
 #   scale_fill_manual(values = c("#619CFF","#00BA38"),na.value = "transparent",labels=c("Rice only","Both rice and wheat",""))+
 #   labs(x="Longitude",y="Latitude",title="System: Fixed, medium duration variety rice planting strategy",fill="Crop with clear benefits")
-# previous_theme <- theme_set(theme_bw())
+# previous_theme <- theme_set(theme_bw(base_size = 16))
 # System_fixedmedium
 # 
-# ggsave("output/figures/System_fixedmedium.png",dpi=300,width=6.88, height=4.16)
+# ggsave("output/figures/System_fixedmedium.png",dpi=300,width=3.88, height=3.16)
 # 
 # ### fixed long vs. onset long
 # r1_System_fixedlong_onset_long=r1_Wheat_fixedlong_onset_long+r1_Rice_fixedlong_onset_long
@@ -501,13 +501,13 @@ ggsave("output/figures_IGP/Wheat_onset_medium_supp_IGP.png",dpi=300,width=6.88, 
 # levelplot(r1_System_fixedlong_onset_long,par.settings=RdBuTheme(),margin=F, main="System:Onset long more beneficial than fixed long strategy")
 # 
 # System_fixedmedium=gplot(r1_System_fixedlong_onset_long) +
-#   geom_raster(aes(fill = factor(value)))+
+#  geom_raster(aes(fill = factor(value)), show.legend = FALSE)+
 #   scale_fill_manual(values = c("#619CFF","#00BA38"),na.value = "transparent",labels=c("Rice only","Both rice and wheat",""))+
 #   labs(x="Longitude",y="Latitude",title="System: Fixed, medium duration variety rice planting strategy",fill="Crop with clear benefits")
-# previous_theme <- theme_set(theme_bw())
+# previous_theme <- theme_set(theme_bw(base_size = 16))
 # System_fixedmedium
 # 
-# ggsave("output/figures/System_fixedmedium.png",dpi=300,width=6.88, height=4.16)
+# ggsave("output/figures/System_fixedmedium.png",dpi=300,width=3.88, height=3.16)
 # 
 
 
